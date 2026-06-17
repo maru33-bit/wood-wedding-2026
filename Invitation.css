@@ -16,7 +16,7 @@ body {
   height: 100vh;
   background:
     linear-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.55)),
-    url("images/hero.jpg");
+    url("images/test1.png");
   background-size: cover;
   background-position: center;
   display: flex;
