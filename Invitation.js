@@ -59,3 +59,43 @@ setInterval(updateCountdown, 1000);
 
 console.log('Wood Wedding Invitation');
 
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyvrx2QL6NXvoM7p1e9wb55D_42SZeJmn8afpVD5GqApp6llGkEgRw911bhpZqqZYnW/exec";
+const GAS_URL = "ここにGASのURL";
+
+document
+  .getElementById("rsvp-form")
+  .addEventListener("submit", async function (e) {
+
+    e.preventDefault();
+
+    const data = {
+      name: document.getElementById("name").value,
+      attendance: document.getElementById("attendance").value,
+      allergy: document.getElementById("allergy").value,
+      message: document.getElementById("message").value,
+      question: document.getElementById("question").value
+    };
+
+    try {
+
+      await fetch(GAS_URL, {
+        method: "POST",
+        body: JSON.stringify(data)
+      });
+
+      document.getElementById("result-message")
+        .textContent = "送信ありがとうございました！";
+
+      document.getElementById("rsvp-form").reset();
+
+    } catch (error) {
+
+      document.getElementById("result-message")
+        .textContent = "送信に失敗しました。";
+
+      console.error(error);
+
+    }
+
+  });
+
