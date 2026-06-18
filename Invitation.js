@@ -77,11 +77,15 @@ document
 
     try {
 
+      alert("送信開始");
+
       await fetch(GAS_URL, {
         method: "POST",
         mode: "no-cors",
         body: JSON.stringify(data)
       });
+
+      alert("fetch完了");
 
       document.getElementById("result-message")
         .textContent = "送信ありがとうございました！";
@@ -90,12 +94,13 @@ document
 
     } catch (error) {
 
+      alert("エラー発生");
+
       document.getElementById("result-message")
         .textContent = "送信に失敗しました。";
 
       console.error(error);
 
     }
-
   });
 
