@@ -222,3 +222,30 @@ footer {
   margin-top: 24px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
+
+.rsvp form {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.rsvp label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.rsvp input,
+.rsvp select,
+.rsvp textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+#result-message {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
