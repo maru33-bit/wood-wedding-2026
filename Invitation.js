@@ -60,7 +60,6 @@ setInterval(updateCountdown, 1000);
 console.log('Wood Wedding Invitation');
 
 const GAS_URL = "https://script.google.com/macros/s/AKfycbyvrx2QL6NXvoM7p1e9wb55D_42SZeJmn8afpVD5GqApp6llGkEgRw911bhpZqqZYnW/exec";
-const GAS_URL = "ここにGASのURL";
 
 document
   .getElementById("rsvp-form")
