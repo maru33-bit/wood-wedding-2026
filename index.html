@@ -3,140 +3,379 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>木婚式 Invitation</title>
+  <title>Masaru and Manami 5th Anniversary Party</title>
 
+  <!-- ==========================================================
+       Google Fonts の読み込み
+       ・Cormorant Garamond … 英語の大きな見出し（イタリック体）用
+       ・Yellowtail          … 「Message」「RSVP」などの筆記体見出し用
+       ・Noto Serif JP       … 日本語の本文用（明朝体）
+  =========================================================== -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Yellowtail&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS読み込み -->
   <link rel="stylesheet" href="Invitation.css">
 </head>
 <body>
 
-  <div class="hero">
-    <img class="flower left" src="images/test1.png" alt="gallery">
-    <img class="flower right" src="images/test1.png" alt="gallery">
-    
-    <div class="hero-content">
-      <div class="sub-title">5th Anniversary Party</div>
-      <h1 class="main-title">Wood Wedding</h1>
-      <div class="jp-title">木婚式 Invitation</div>
-      <div class="date">2026.11.03 Tue</div>
+  <!-- ==========================================================
+       ① 封筒アニメーション（オープニング演出）
+       ページを開くと、まずこの封筒だけが画面いっぱいに表示される。
+       「タップして開く」をクリックすると封筒のフタが開き、
+       中身（本編）がフェードインしながら現れる。
+       演出が終わったら display:none にして完全に取り除く。
+  =========================================================== -->
+  <div id="envelope-screen" class="envelope-screen">
+    <div class="envelope" id="envelope">
+      <!-- 封筒の本体（台形の袋部分） -->
+      <div class="envelope-body"></div>
+      <!-- 封筒の中に入っている招待状カード（開封と同時に少し上に出てくる） -->
+      <div class="envelope-letter">
+        <p class="envelope-letter-en">Invitation</p>
+        <p class="envelope-letter-jp">結婚5周年<br>パーティーのご案内</p>
+      </div>
+      <!-- 封筒のフタ（三角形。開封時にこれが上に回転して開く） -->
+      <div class="envelope-flap"></div>
     </div>
+    <p class="envelope-hint" id="envelope-hint">タップして封筒を開ける</p>
   </div>
-  </section>
-  <section class="countdown">
-  <h2>Countdown</h2>
-  <p id="countdown-text">計算中...</p>
-  </section>
-  
-  <section class="details">
-  
-  <section class="message">
-    <h2>Message</h2>
-    <p>
-      日頃お世話になっている皆さまへ。<br>
-      このたび私たちは結婚5周年を迎えることとなりました。<br><br>
-      感謝の気持ちを込めて、ささやかな木婚式パーティーを開催いたします。<br>
-      大切な皆さまと穏やかな時間を過ごせましたら幸いです。
-    </p>
-  </section>
 
-  <section class="details">
-    <h2 style="text-align:center;">Information</h2>
+  <!-- ここから本編。封筒が開くまでは envelope-screen の下に隠れている -->
+  <main id="main-content">
 
-    <div class="details-grid">
-      <div class="card">
-        <div class="card-title">Date</div>
+    <!-- ==========================================================
+         ② ヒーローセクション（オープニング）
+         左：写真が縦に3枚並ぶギャラリー風エリア
+         右：お二人の名前・パーティー名・日付
+         背景には大きく回転した英字の飾り文字を薄く配置する
+    =========================================================== -->
+    <section class="hero" id="hero">
+      <!-- 背景にうっすら浮かぶ大きな筆記体の飾り文字 -->
+      <div class="hero-bg-text" aria-hidden="true">wedding</div>
+
+      <div class="hero-inner">
+        <!-- 写真ギャラリー（後で images/hero1.jpg 等を差し替えてください） -->
+        <div class="hero-gallery">
+          <img src="images/hero1.jpg" alt="お二人の写真1">
+          <img src="images/hero2.jpg" alt="お二人の写真2">
+          <img src="images/hero3.jpg" alt="お二人の写真3">
+        </div>
+
+        <!-- テキストエリア -->
+        <div class="hero-text">
+          <p class="hero-name">Masaru</p>
+          <p class="hero-and">and</p>
+          <p class="hero-name">Manami</p>
+          <p class="hero-sub">5th Anniversary Party</p>
+          <p class="hero-date">2026.11.03</p>
+        </div>
+      </div>
+
+      <!-- 下にスクロールできることを知らせる矢印 -->
+      <div class="scroll-down" aria-hidden="true">
+        <span></span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ③ カウントダウンセクション（ピンクベージュ背景）
+         当日まであと何日何時間かを1秒ごとに更新して表示する
+    =========================================================== -->
+    <section class="countdown">
+      <div class="countdown-box">
+        <img src="images/countdown-bg.jpg" alt="" class="countdown-bg-img">
+        <div class="countdown-overlay">
+          <p class="countdown-label">パーティーまであと</p>
+          <!-- ここの中身は Invitation.js が書き換える -->
+          <p class="countdown-days"><span id="cd-days">--</span> days</p>
+          <p class="countdown-detail">
+            <span id="cd-hours">--</span> hours
+            <span id="cd-minutes">--</span> minutes
+            <span id="cd-seconds">--</span> seconds
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ④ メッセージセクション（アイボリー背景）
+    =========================================================== -->
+    <section class="message">
+      <h2 class="script-heading">Message</h2>
+      <div class="message-body">
+        <p>お世話になっている皆さまへ</p>
         <p>
-          2026年11月3日（火・祝）<br>
-          17:00 START
+          このたび私たちは<br>
+          結婚５周年を迎えることとなりました
+        </p>
+        <p>
+          感謝の気持ちを込めて<br>
+          ささやかなパーティーを開催いたします<br>
+          大切な皆さまと穏やかな時間を<br>
+          過ごせましたら幸いです
+        </p>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ⑤ プロフィールセクション（新郎・新婦）
+         写真は「コイン」のように表と裏を持っていて、
+         タップ（クリック）すると回転してもう片方の写真が見える。
+    =========================================================== -->
+    <section class="profile">
+
+      <!-- 新郎 -->
+      <div class="profile-card">
+        <!-- コイン本体。images/groom-front.jpg と groom-back.jpg を差し替えてください -->
+        <button type="button" class="coin" data-coin aria-label="タップして新郎の写真を切り替える">
+          <span class="coin-inner">
+            <span class="coin-face coin-front">
+              <img src="images/groom-front.jpg" alt="新郎の写真（表）">
+            </span>
+            <span class="coin-face coin-back">
+              <img src="images/groom-back.jpg" alt="新郎の写真（裏）">
+            </span>
+          </span>
+        </button>
+        <p class="profile-role">新郎</p>
+        <p class="profile-name">佐久間 克</p>
+        <p class="profile-comment">
+          皆様にお会いできることが、今から楽しみです！<br>
+          美味しい料理と飲み物をご用意してお待ちしています
         </p>
       </div>
 
-      <div class="card">
-        <div class="card-title">Place</div>
-        <p>
-          ○○ Restaurant<br>
-          Tokyo
+      <!-- 新婦 -->
+      <div class="profile-card">
+        <button type="button" class="coin" data-coin aria-label="タップして新婦の写真を切り替える">
+          <span class="coin-inner">
+            <span class="coin-face coin-front">
+              <img src="images/bride-front.jpg" alt="新婦の写真（表）">
+            </span>
+            <span class="coin-face coin-back">
+              <img src="images/bride-back.jpg" alt="新婦の写真（裏）">
+            </span>
+          </span>
+        </button>
+        <p class="profile-role">新婦</p>
+        <p class="profile-name">佐久間 愛海</p>
+        <p class="profile-comment">
+          皆様にお会いできることが、今から楽しみです！<br>
+          美味しい料理と飲み物をご用意してお待ちしています
+        </p>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ⑥ ギャラリーセクション
+         画像が自動で横に流れ続ける（マーキー演出）。
+         CSSアニメーションだけで実現しているのでJSは不要。
+    =========================================================== -->
+    <section class="gallery">
+      <h2 class="script-heading light">Gallery</h2>
+      <div class="gallery-marquee">
+        <div class="gallery-track">
+          <!-- 1周目 -->
+          <img src="images/gallery1.jpg" alt="ギャラリー写真1">
+          <img src="images/gallery2.jpg" alt="ギャラリー写真2">
+          <img src="images/gallery3.jpg" alt="ギャラリー写真3">
+          <img src="images/gallery4.jpg" alt="ギャラリー写真4">
+          <img src="images/gallery5.jpg" alt="ギャラリー写真5">
+          <!-- 2周目（切れ目なくループさせるため同じ画像をもう一度並べる） -->
+          <img src="images/gallery1.jpg" alt="" aria-hidden="true">
+          <img src="images/gallery2.jpg" alt="" aria-hidden="true">
+          <img src="images/gallery3.jpg" alt="" aria-hidden="true">
+          <img src="images/gallery4.jpg" alt="" aria-hidden="true">
+          <img src="images/gallery5.jpg" alt="" aria-hidden="true">
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ⑦ パーティー情報セクション（オリーブグリーン背景）
+    =========================================================== -->
+    <section class="party-info">
+      <h2 class="script-heading light">Party Information</h2>
+
+      <div class="info-block">
+        <p class="info-title">開催日</p>
+        <div class="info-divider"></div>
+        <p class="info-date">2026年 11月 3日 火曜日</p>
+        <p class="info-time">開始時刻 <span>15:00</span></p>
+        <p class="info-time-sub">受付 14:30 ／ 終了予定 18:00</p>
+      </div>
+
+      <div class="info-block">
+        <p class="info-title">会場情報</p>
+        <div class="info-divider"></div>
+        <p class="info-venue">BIRTH LAB</p>
+        <p class="info-address">
+          〒106-0045<br>
+          東京都港区麻布十番2-20-7<br>
+          麻布十番髙木ビル 1F
         </p>
       </div>
 
-      <div class="card">
-        <div class="card-title">Dress Code</div>
-        <p>
-          Beige / Brown / Natural<br>
-          お気軽な服装でお越しください
+      <!-- ==========================================================
+           ⑧ アクセス（Googleマップ埋め込み）
+           iframeなのでタップ／クリックでGoogleマップアプリが開ける
+      =========================================================== -->
+      <div class="info-block">
+        <p class="info-access-text">
+          都営大江戸線／東京メトロ南北線<br>
+          「麻布十番駅」1番／4番出口から徒歩1分
         </p>
+        <div class="map-wrapper">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.9000187605357!2d139.73410297649215!3d35.654834872595735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b5fe58bafed%3A0xb0dfc1eb5c8f2816!2sBIRTH%20LAB%20%2F%20WORK!5e0!3m2!1sja!2sjp!4v1781591691264!5m2!1sja!2sjp"
+            width="100%" height="320" style="border:0;" allowfullscreen=""
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            title="BIRTH LAB 地図"></iframe>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="gallery">
-    <h2 style="text-align:center;">Gallery</h2>
+    <!-- ==========================================================
+         ⑨ ご案内セクション（ドレスコード／会費／お荷物）
+    =========================================================== -->
+    <section class="guidance">
+      <h2 class="section-title">ご案内</h2>
 
-    <div class="gallery-grid">
-      <img src="images/test1.png" alt="gallery">
-      <img src="images/test1.png" alt="gallery">
-      <img src="images/test1.png" alt="gallery">
-    </div>
-  </section>
-  <section class="access">
-  <h2>Access</h2>
+      <div class="guidance-item">
+        <div class="guidance-number">01</div>
+        <div class="guidance-body">
+          <p class="guidance-heading">ドレスコード（服装）</p>
+          <p class="guidance-text">
+            お召し物：ご友人の結婚式等に参列される際の<br>
+            お気に入りのドレスやスーツでお越しください
+          </p>
+          <p class="guidance-text">
+            お足元：立食パーティー形式（ソファやベンチ等のお席あり）となります。<br>
+            足元が疲れぬようローヒールや履き慣れたお靴でお越しいただいても<br>
+            全く問題ございません
+          </p>
+        </div>
+      </div>
 
-  <p>
-    BIRTH LAB / WORK<br>
-    〒106-0045 東京都港区麻布十番２丁目２０−７ 髙木ビル １F
-  </p>
+      <div class="guidance-item">
+        <div class="guidance-number">02</div>
+        <div class="guidance-body">
+          <p class="guidance-heading">会費のご案内</p>
+          <p class="guidance-text">
+            お一人様 15,000円<br>
+            受付混雑緩和のため、会費はあらかじめ「お名前を記載した封筒
+            （またはご祝儀袋など）」にお納めのうえ受付へお渡しいただけますと幸いです
+          </p>
+        </div>
+      </div>
 
-  <!-- Googleマップ ↓にiframeを貼る！-->
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.9000187605357!2d139.73410297649215!3d35.654834872595735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b5fe58bafed%3A0xb0dfc1eb5c8f2816!2sBIRTH%20LAB%20%2F%20WORK!5e0!3m2!1sja!2sjp!4v1781591691264!5m2!1sja!2sjp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"> 
-  </iframe>
-  </section>
+      <div class="guidance-item">
+        <div class="guidance-number">03</div>
+        <div class="guidance-body">
+          <p class="guidance-heading">お荷物について</p>
+          <p class="guidance-text">
+            専用クロークのご用意がございませんため、<br>
+            できるだけ身軽なお荷物でお越しいただけますと幸いです
+          </p>
+        </div>
+      </div>
+    </section>
 
-  <section class="rsvp">
-    <h2>RSVP</h2>
-    <p>
-      ご出欠につきましては、<br>
-      下記ボタンよりご回答をお願いいたします。
-    </p>
+    <!-- ==========================================================
+         ⑩ RSVP（出欠確認）セクション
+         ・出席／欠席／保留のボタンを押すと丸印がつく
+         ・同ページ内にそのままフォームを設置し、GAS経由で
+           グーグルスプレッドシートに送信する
+    =========================================================== -->
+    <section class="rsvp">
+      <h2 class="script-heading">RSVP</h2>
+      <p class="rsvp-lead">ご出欠について</p>
+      <p class="rsvp-deadline">
+        誠に勝手ながら<br>
+        <strong>2026年9月30日（水）</strong>までに<br>
+        ご回答いただければ幸いに存じます
+      </p>
 
-    <form id="rsvp-form">
+      <form id="rsvp-form" novalidate>
 
-    <label>お名前（必須）</label>
-    <input type="text" id="name" required>
+        <!-- ---------- 出欠選択ボタン（3択） ---------- -->
+        <div class="attend-buttons" role="group" aria-label="ご出欠の選択">
 
-    <label>出席／欠席（必須）</label>
-    <select id="attendance" required>
-      <option value="">選択してください</option>
-      <option value="出席">出席</option>
-      <option value="欠席">欠席</option>
-    </select>
+          <!-- data-value に実際にスプレッドシートへ送る値を入れておく -->
+          <button type="button" class="attend-btn" data-value="出席">
+            <span class="attend-mark" aria-hidden="true"></span>
+            <span class="attend-btn-jp">ご出席</span>
+            <span class="attend-btn-en">Attend</span>
+          </button>
 
-    <label>アレルギー</label>
-    <input type="text" id="allergy">
+          <button type="button" class="attend-btn" data-value="欠席">
+            <span class="attend-mark" aria-hidden="true"></span>
+            <span class="attend-btn-jp">ご欠席</span>
+            <span class="attend-btn-en">Decline</span>
+          </button>
 
-    <label>メッセージ</label>
-    <textarea id="message" rows="4"></textarea>
+          <button type="button" class="attend-btn" data-value="保留">
+            <span class="attend-mark" aria-hidden="true"></span>
+            <span class="attend-btn-jp">保留</span>
+            <span class="attend-btn-en">Hold</span>
+          </button>
+        </div>
+        <!-- 実際に送信される出欠の値。JSがボタン操作に合わせて更新する -->
+        <input type="hidden" id="attendance" name="attendance" required>
+        <!-- 出欠が未選択のまま送信しようとした時に出すエラーメッセージ -->
+        <p class="field-error" id="attendance-error">出欠を選択してください</p>
 
-    <label>私たちへの質問</label>
-    <textarea id="question" rows="4"></textarea>
+        <!-- ---------- お名前 ---------- -->
+        <label for="name">お名前<span class="required-badge">必須</span></label>
+        <input type="text" id="name" name="name" placeholder="例）山田　太郎" required>
 
-    <button type="submit" class="button">
-      送信する
-    </button>
+        <!-- ---------- ご住所 ---------- -->
+        <label for="address">ご住所<span class="required-badge">必須</span></label>
+        <input type="text" id="address" name="address" placeholder="例）東京都千代田区三丁目5番7号" required>
 
-  </form>
+        <!-- ---------- メールアドレス ---------- -->
+        <label for="email">メールアドレス<span class="required-badge">必須</span></label>
+        <input type="email" id="email" name="email" placeholder="例）sample@xxx.com" required>
 
-  <p id="result-message"></p>
-  </section>
+        <!-- ---------- 電話番号 ---------- -->
+        <label for="phone">電話番号<span class="required-badge">必須</span></label>
+        <input type="tel" id="phone" name="phone" placeholder="例）0120-200-177" required>
 
-  <footer>
-    Thank you always, heart to heart.
-  </footer>
+        <!-- ---------- アレルギーの有無 ----------
+             「出席」または「保留」を選んだ時だけ表示する。
+             欠席の場合は不要な項目なので非表示＆必須解除にする。
+        -->
+        <div id="allergy-field">
+          <label for="allergy">アレルギーの有無<span class="required-badge">必須</span></label>
+          <input type="text" id="allergy" name="allergy" placeholder="例）あり（甲殻類、小麦）">
+        </div>
 
-  <!-- JavaScript読み込み -->
+        <!-- ---------- メッセージ・質問 ---------- -->
+        <label for="question">私たちに聞いてみたい事やメッセージなど</label>
+        <p class="field-note">
+          パーティー後にお聞きいただけるポッドキャスト内でお答えさせていただきます！<br>
+          お好きなラジオネームと一緒にぜひお寄せください。
+        </p>
+        <textarea id="question" name="question" rows="4"
+          placeholder="例）2人の好きなお味噌汁の具はなんですか？（30代女性／のびのびヨギ太郎）"></textarea>
+
+        <!-- ---------- 送信ボタン ---------- -->
+        <button type="submit" class="submit-btn" id="submit-btn">送信する</button>
+      </form>
+
+      <!-- 送信結果（成功／失敗）をここに表示する -->
+      <p id="result-message" role="status" aria-live="polite"></p>
+    </section>
+
+    <footer class="footer">
+      <p>© 2026 Masaru &amp; Manami</p>
+    </footer>
+
+  </main>
+
+  <!-- JavaScript読み込み（bodyの一番最後に置くことでHTML読み込み後に実行される） -->
   <script src="Invitation.js"></script>
 </body>
 </html>
