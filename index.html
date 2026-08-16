@@ -44,20 +44,24 @@
     <!-- ==========================================================
          ② ヒーローセクション
          修正点：
-         ・写真は横並び→縦並びに変更
-         ・背景の飾り文字を「Invitation」に変更
+         ・左側に写真3枚を縦並び、右側にテキストという
+           2カラム構成に変更（スマホでも常にこの並び）
+         ・右端の背景に薄く「wedding」の縦文字
+         ・左側の写真の手前（透かし）に「invitation」の縦文字
          ・背景色を白に指定
     =========================================================== -->
     <section class="hero" id="hero">
-      <!-- 縦に倒した「Invitation」の飾り文字（装飾なのでaria-hiddenにしている） -->
-      <div class="hero-bg-text" aria-hidden="true">Invitation</div>
+      <!-- 右端：背景に薄く浮かぶ「wedding」の縦文字（装飾なのでaria-hidden） -->
+      <div class="hero-bg-text" aria-hidden="true">wedding</div>
 
       <div class="hero-inner">
-        <!-- 写真ギャラリー：縦に3枚並べる -->
+        <!-- 左カラム：写真3枚を縦に並べる -->
         <div class="hero-gallery">
           <img src="images/hero1.jpg" alt="お二人の写真1">
           <img src="images/hero2.jpg" alt="お二人の写真2">
           <img src="images/hero3.jpg" alt="お二人の写真3">
+          <!-- 写真の「手前」に重ねる透かし文字。画像より前面(z-indexが高い)に配置している -->
+          <div class="hero-watermark" aria-hidden="true">invitation</div>
         </div>
 
         <div class="hero-text">
@@ -73,32 +77,62 @@
     </section>
 
     <!-- ==========================================================
-         ③ カウントダウンセクション
-         修正点：背景画像を差し込めるフルサイズの構造に変更
-         images/countdown-bg.jpg を差し替えるだけでOK
+         ③-a カウントダウン上の接続セクション
+         背景色はヒーローと同じ(白)。横幅いっぱいの画像を1枚差し込める。
+         images/countdown-connector-top.jpg を差し替えてください
     =========================================================== -->
-    <section class="countdown bg-photo-section">
-      <img class="bg-photo-img" src="images/countdown-bg.jpg" alt="">
-      <div class="bg-photo-overlay overlay-pink"></div>
-      <div class="bg-photo-content">
-        <p class="countdown-label">パーティーまであと</p>
-        <p class="countdown-days"><span id="cd-days">--</span> days</p>
-        <p class="countdown-detail">
-          <span id="cd-hours">--</span> hours
-          <span id="cd-minutes">--</span> minutes
-          <span id="cd-seconds">--</span> seconds
-        </p>
+    <section class="connector connector-top">
+      <img class="connector-img" src="images/countdown-connector-top.png" alt="">
+    </section>
+
+    <!-- ==========================================================
+         ③ カウントダウンセクション
+         修正点：
+         ・背景色を #D0ABA1 の単色にし、その上に一回り小さい写真を重ねた
+         ・テキストは写真の中央ではなく、上寄せに配置
+    =========================================================== -->
+    <section class="countdown">
+      <div class="countdown-box">
+        <!-- 一回り小さく表示される写真。images/countdown-photo.jpg を差し替え -->
+        <img class="countdown-photo" src="images/countdown-photo.jpg" alt="">
+        <div class="countdown-text">
+          <p class="countdown-label">パーティーまであと</p>
+          <p class="countdown-days"><span id="cd-days">--</span> days</p>
+          <p class="countdown-detail">
+            <span id="cd-hours">--</span> hours
+            <span id="cd-minutes">--</span> minutes
+            <span id="cd-seconds">--</span> seconds
+          </p>
+        </div>
       </div>
     </section>
 
     <!-- ==========================================================
+         ③-b カウントダウン下の接続セクション
+         背景色はメッセージセクションと同じ。横幅いっぱいの画像を1枚と、
+         その上に重なるように配置する「アクセント画像」(サイズ調整可)を1枚差し込める。
+         images/countdown-connector-bottom.jpg / countdown-connector-accent.jpg を差し替えてください
+    =========================================================== -->
+    <section class="connector connector-bottom">
+      <img class="connector-img" src="images/countdown-connector-bottom.png" alt="">
+      <!-- アクセント画像：サイズや位置は Invitation.css の .connector-accent-img で調整できる -->
+      <img class="connector-accent-img" src="images/countdown-connector-accent.png" alt="">
+    </section>
+
+    <!-- ==========================================================
          ④ メッセージセクション
-         修正点：背景画像を差し込めるフルサイズの構造に変更
-         images/message-bg.jpg を差し替えるだけでOK
+         修正点：サイズ調整できる「アクセント画像」を
+         2枚重ねて配置できるようにした。
+         images/message-accent1.jpg / message-accent2.jpg を差し替えてください
     =========================================================== -->
     <section class="message bg-photo-section">
-      <img class="bg-photo-img" src="images/message-bg1.png" alt="">
       <div class="bg-photo-overlay overlay-cream"></div>
+
+      <!-- アクセント画像2枚。位置・サイズは Invitation.css の
+           .message-accent-1 / .message-accent-2 でそれぞれ調整できる -->
+      <img class="message-accent-img message-accent-1" src="images/message-accent1.png" alt="">
+      <img class="message-accent-img message-accent-2" src="images/message-accent2.png" alt="">
+
       <div class="bg-photo-content">
         <h2 class="script-heading">Message</h2>
         <div class="message-body">
