@@ -14,9 +14,11 @@
   --color-text-light: #fffaf3;
   --color-gold: #b98a4e;
 
-  --font-en-serif: 'Cormorant Garamond', serif;
-  --font-en-script: 'Yellowtail', cursive;
-  --font-jp: 'Noto Serif JP', serif;
+  --font-en-serif: 'Cormorant Garamond', serif;       /* ヒーローの名前など、繊細な欧文見出し */
+  --font-en-script: 'Pinyon Script', cursive;          /* Message/RSVP/Party Information など、細めの筆記体見出し */
+  --font-en-script-bold: 'Yellowtail', cursive;        /* ヒーロー背景の大きな筆記体("Invitation")専用。上より太い */
+  --font-jp: 'Noto Serif JP', serif;                    /* 本文用の明朝体 */
+  --font-jp-bold: 'Noto Sans JP', sans-serif;           /* 名前やご案内見出しなど、太いゴシック体にしたい箇所用 */
 
   --section-padding: 88px 24px;
 }
@@ -62,7 +64,7 @@ button {
 
 .script-heading {
   font-family: var(--font-en-script);
-  font-size: clamp(2.2rem, 8vw, 3rem);
+  font-size: clamp(2.6rem, 10vw, 3.6rem); /* Pinyon Scriptは線が細いため、Yellowtailの時より少し大きめに設定 */
   font-weight: 400;
   color: var(--color-olive);
   text-align: center;
@@ -73,6 +75,7 @@ button {
 }
 
 .section-title {
+  font-family: var(--font-jp-bold);
   font-size: 1.6rem;
   text-align: center;
   margin-bottom: 48px;
@@ -272,8 +275,7 @@ button {
   right: -6%;
   transform: translateY(-50%) rotate(90deg);
   transform-origin: center;
-  font-family: var(--font-en-serif);
-  font-style: italic;
+  font-family: var(--font-en-script-bold); /* Yellowtail: Message等より太い専用の筆記体 */
   font-size: clamp(3.2rem, 18vw, 7rem);
   color: var(--color-olive);
   opacity: 0.12;
@@ -314,8 +316,9 @@ button {
 
 .hero-name {
   font-family: var(--font-en-serif);
-  font-style: italic;
+  font-weight: 500;
   font-size: clamp(2.6rem, 12vw, 3.6rem);
+  letter-spacing: 1px;
   color: var(--color-text);
   line-height: 1.1;
 }
@@ -483,6 +486,7 @@ button {
 }
 
 .profile-name {
+  font-family: var(--font-jp-bold);
   font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 16px;
@@ -587,15 +591,16 @@ button {
 }
 
 .info-title {
+  font-family: var(--font-jp-bold);
   font-size: 1.05rem;
   letter-spacing: 2px;
   margin-bottom: 14px;
 }
 
 .info-divider {
-  width: 60px;
+  width: 110px; /* スクリーンショットに合わせて線を長めに */
   height: 1px;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.6);
   margin: 0 auto 20px;
 }
 
@@ -687,6 +692,7 @@ button {
 }
 
 .guidance-heading {
+  font-family: var(--font-jp-bold);
   font-size: 1.1rem;
   font-weight: 700;
 }
@@ -719,6 +725,7 @@ button {
 }
 
 .rsvp-lead {
+  font-family: var(--font-jp-bold);
   text-align: center;
   font-size: 1.1rem;
   margin-bottom: 16px;
@@ -759,6 +766,7 @@ button {
 }
 
 .attend-btn-jp {
+  font-family: var(--font-jp-bold);
   font-size: 0.95rem;
   font-weight: 700;
 }
@@ -809,6 +817,7 @@ button {
 
 #rsvp-form label {
   display: block;
+  font-family: var(--font-jp-bold);
   margin-top: 24px;
   margin-bottom: 8px;
   font-size: 0.92rem;
