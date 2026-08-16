@@ -688,7 +688,7 @@ button {
   border-radius: 4px;
   background:
     linear-gradient(rgba(185, 138, 78, 0.82), rgba(185, 138, 78, 0.82)),
-    url("images/guidance-number-bg.jpg") center / cover;
+    url("images/guidance-number-bg.png") center / cover;
 }
 
 .guidance-heading {
