@@ -44,23 +44,21 @@
     <!-- ==========================================================
          ② ヒーローセクション
          修正点：
-         ・左側に写真3枚を縦並び、右側にテキストという
-           2カラム構成に変更（スマホでも常にこの並び）
-         ・右端の背景に薄く「wedding」の縦文字
-         ・左側の写真の手前（透かし）に「invitation」の縦文字
-         ・背景色を白に指定
+         ・写真3枚は上下左に余白なく敷き詰め、センターラインまで拡大
+         ・「wedding」は右上の角に余白なくぴったり配置(画像1枚目の上端と揃える)
+         ・「invitation」は左下の角に余白なくぴったり配置(画像3枚目の下端と揃える)
     =========================================================== -->
     <section class="hero" id="hero">
-      <!-- 右端：背景に薄く浮かぶ「wedding」の縦文字（装飾なのでaria-hidden） -->
+      <!-- 右上の角にぴったり配置する「wedding」の縦文字（装飾なのでaria-hidden） -->
       <div class="hero-bg-text" aria-hidden="true">wedding</div>
 
       <div class="hero-inner">
-        <!-- 左カラム：写真3枚を縦に並べる -->
+        <!-- 左カラム：写真3枚を上下左に余白なく敷き詰める -->
         <div class="hero-gallery">
           <img src="images/hero1.jpg" alt="お二人の写真1">
           <img src="images/hero2.jpg" alt="お二人の写真2">
           <img src="images/hero3.jpg" alt="お二人の写真3">
-          <!-- 写真の「手前」に重ねる透かし文字。画像より前面(z-indexが高い)に配置している -->
+          <!-- 左下の角にぴったり配置する透かし文字。画像より前面(z-indexが高い)に配置している -->
           <div class="hero-watermark" aria-hidden="true">invitation</div>
         </div>
 
@@ -82,7 +80,7 @@
          images/countdown-connector-top.jpg を差し替えてください
     =========================================================== -->
     <section class="connector connector-top">
-      <img class="connector-img" src="images/countdown-connector-top.png" alt="">
+      <img class="connector-img" src="images/countdown-connector-top.jpg" alt="">
     </section>
 
     <!-- ==========================================================
@@ -114,26 +112,24 @@
          images/countdown-connector-bottom.jpg / countdown-connector-accent.jpg を差し替えてください
     =========================================================== -->
     <section class="connector connector-bottom">
-      <img class="connector-img" src="images/countdown-connector-bottom.png" alt="">
+      <img class="connector-img" src="images/countdown-connector-bottom.jpg" alt="">
       <!-- アクセント画像：サイズや位置は Invitation.css の .connector-accent-img で調整できる -->
-      <img class="connector-accent-img" src="images/countdown-connector-accent.png" alt="">
+      <img class="connector-accent-img" src="images/countdown-connector-accent.jpg" alt="">
     </section>
 
     <!-- ==========================================================
          ④ メッセージセクション
-         修正点：サイズ調整できる「アクセント画像」を
-         2枚重ねて配置できるようにした。
+         修正点：単色背景(#EAE7E4)の上に、サイズ調整できる
+         「アクセント画像」を2枚、影なしで背景に溶け込むように配置
          images/message-accent1.jpg / message-accent2.jpg を差し替えてください
     =========================================================== -->
-    <section class="message bg-photo-section">
-      <div class="bg-photo-overlay overlay-cream"></div>
-
+    <section class="message">
       <!-- アクセント画像2枚。位置・サイズは Invitation.css の
            .message-accent-1 / .message-accent-2 でそれぞれ調整できる -->
       <img class="message-accent-img message-accent-1" src="images/message-accent1.png" alt="">
       <img class="message-accent-img message-accent-2" src="images/message-accent2.png" alt="">
 
-      <div class="bg-photo-content">
+      <div class="message-content">
         <h2 class="script-heading">Message</h2>
         <div class="message-body">
           <p>お世話になっている皆さまへ</p>
@@ -150,8 +146,12 @@
 
     <!-- ==========================================================
          ⑤ プロフィールセクション（コイン反転写真）
-         修正点：Safari(iPhone)でも正しく表と裏が
-         切り替わるよう、Invitation.css側でベンダープレフィックスを追加
+         修正点：
+         ・Safari(iPhone)でも正しく表と裏が切り替わるよう
+           Invitation.css側でベンダープレフィックスを追加
+         ・「名前」「メッセージ」は、後日手書き文字の透過PNGを
+           はめ込む予定とのことなので、テキストではなく画像の
+           「枠」として用意した（images/groom-name.png 等を差し替えるだけでOK）
     =========================================================== -->
     <section class="profile">
       <div class="profile-card">
@@ -162,11 +162,10 @@
           </span>
         </button>
         <p class="profile-role">新郎</p>
-        <p class="profile-name">佐久間 克</p>
-        <p class="profile-comment">
-          皆様にお会いできることが、今から楽しみです！<br>
-          美味しい料理と飲み物をご用意してお待ちしています
-        </p>
+        <!-- 手書き文字(透過PNG)をはめ込む枠。images/groom-name.png を差し替えてください -->
+        <img class="profile-name-img" src="images/groom-name.png" alt="新郎 佐久間 克">
+        <!-- 手書きメッセージ(透過PNG)をはめ込む枠。images/groom-message.png を差し替えてください -->
+        <img class="profile-message-img" src="images/groom-message.png" alt="新郎からのメッセージ">
       </div>
 
       <div class="profile-card">
@@ -177,11 +176,8 @@
           </span>
         </button>
         <p class="profile-role">新婦</p>
-        <p class="profile-name">佐久間 愛海</p>
-        <p class="profile-comment">
-          皆様にお会いできることが、今から楽しみです！<br>
-          美味しい料理と飲み物をご用意してお待ちしています
-        </p>
+        <img class="profile-name-img" src="images/bride-name.png" alt="新婦 佐久間 愛海">
+        <img class="profile-message-img" src="images/bride-message.png" alt="新婦からのメッセージ">
       </div>
     </section>
 
@@ -221,7 +217,6 @@
     =========================================================== -->
     <div class="panel-olive">
       <img class="panel-olive-img" src="images/info-bg.png" alt="">
-      <div class="panel-olive-overlay"></div>
 
       <div class="panel-olive-content">
 
@@ -265,9 +260,10 @@
         <!-- ==========================================================
              ⑨ ご案内セクション
              修正点：
-             ・番号(01)とタイトルを1つの見出し行としてまとめた
-             ・番号バッジの背景に画像を差し込めるようにした
-             ・本文の改行位置を「意味の切れ目」で入れ直した
+             ・番号バッジは画像(images/guidance-number-bg.jpg)そのものを
+               背景として使用し、色のオーバーレイは廃止した
+             ・重なり順：背景色→パーティ情報〜ご案内の背景画像→
+               番号バッジ画像→数字、の順になっている
         =========================================================== -->
         <section class="guidance">
           <h2 class="section-title light">ご案内</h2>
@@ -314,76 +310,79 @@
     <!-- ==========================================================
          ⑩ RSVP（出欠確認）セクション
          修正点：
+         ・背景色(#EAE7E4)の上に、余白を持たせた白いカード
+           （紙の出欠表のイメージ）を重ねる2階層構造に変更
          ・出欠の丸印を画像ファイル(images/rsvp-mark.png)に変更
          ・「RSVP」見出しと「ご出欠について」の行間を詰めた
          ・送信ボタンを文字より一回り大きい可変幅ボタンに変更
-         ・このセクション全体を白背景のパネルにした
     =========================================================== -->
     <section class="rsvp">
-      <h2 class="script-heading">RSVP</h2>
-      <p class="rsvp-lead">ご出欠について</p>
-      <p class="rsvp-deadline">
-        誠に勝手ながら<br>
-        <strong>2026年9月30日（水）</strong>までに<br>
-        ご回答いただければ幸いに存じます
-      </p>
-
-      <form id="rsvp-form" novalidate>
-
-        <div class="attend-buttons" role="group" aria-label="ご出欠の選択">
-          <button type="button" class="attend-btn" data-value="出席">
-            <!-- 丸印は画像ファイル。images/rsvp-mark.png を差し替えれば見た目を変更できる -->
-            <img class="attend-mark" src="images/rsvp-mark.png" alt="" aria-hidden="true">
-            <span class="attend-btn-jp">ご出席</span>
-            <span class="attend-btn-en">Attend</span>
-          </button>
-
-          <button type="button" class="attend-btn" data-value="欠席">
-            <img class="attend-mark" src="images/rsvp-mark.png" alt="" aria-hidden="true">
-            <span class="attend-btn-jp">ご欠席</span>
-            <span class="attend-btn-en">Decline</span>
-          </button>
-
-          <button type="button" class="attend-btn" data-value="保留">
-            <img class="attend-mark" src="images/rsvp-mark.png" alt="" aria-hidden="true">
-            <span class="attend-btn-jp">保留</span>
-            <span class="attend-btn-en">Hold</span>
-          </button>
-        </div>
-        <input type="hidden" id="attendance" name="attendance" required>
-        <p class="field-error" id="attendance-error">出欠を選択してください</p>
-
-        <label for="name">お名前<span class="required-badge">必須</span></label>
-        <input type="text" id="name" name="name" placeholder="例）山田　太郎" required>
-
-        <label for="address">ご住所<span class="required-badge">必須</span></label>
-        <input type="text" id="address" name="address" placeholder="例）東京都千代田区三丁目5番7号" required>
-
-        <label for="email">メールアドレス<span class="required-badge">必須</span></label>
-        <input type="email" id="email" name="email" placeholder="例）sample@xxx.com" required>
-
-        <label for="phone">電話番号<span class="required-badge">必須</span></label>
-        <input type="tel" id="phone" name="phone" placeholder="例）0120-200-177" required>
-
-        <div id="allergy-field">
-          <label for="allergy">アレルギーの有無<span class="required-badge">必須</span></label>
-          <input type="text" id="allergy" name="allergy" placeholder="例）あり（甲殻類、小麦）">
-        </div>
-
-        <label for="question">私たちに聞いてみたい事やメッセージなど</label>
-        <p class="field-note">
-          パーティー後にお聞きいただけるポッドキャスト内でお答えさせていただきます！<br>
-          お好きなラジオネームと一緒にぜひお寄せください。
+      <div class="rsvp-card">
+        <h2 class="script-heading">RSVP</h2>
+        <p class="rsvp-lead">ご出欠について</p>
+        <p class="rsvp-deadline">
+          誠に勝手ながら<br>
+          <strong>2026年9月30日（水）</strong>までに<br>
+          ご回答いただければ幸いに存じます
         </p>
-        <textarea id="question" name="question" rows="4"
-          placeholder="例）2人の好きなお味噌汁の具はなんですか？（30代女性／のびのびヨギ太郎）"></textarea>
 
-        <div class="submit-wrap">
-          <button type="submit" class="submit-btn" id="submit-btn">送信する</button>
-        </div>
-      </form>
+        <form id="rsvp-form" novalidate>
 
-      <p id="result-message" role="status" aria-live="polite"></p>
+          <div class="attend-buttons" role="group" aria-label="ご出欠の選択">
+            <button type="button" class="attend-btn" data-value="出席">
+              <!-- 丸印は画像ファイル。images/rsvp-mark.png を差し替えれば見た目を変更できる -->
+              <img class="attend-mark" src="images/rsvp-mark.png" alt="" aria-hidden="true">
+              <span class="attend-btn-jp">ご出席</span>
+              <span class="attend-btn-en">Attend</span>
+            </button>
+
+            <button type="button" class="attend-btn" data-value="欠席">
+              <img class="attend-mark" src="images/rsvp-mark.png" alt="" aria-hidden="true">
+              <span class="attend-btn-jp">ご欠席</span>
+              <span class="attend-btn-en">Decline</span>
+            </button>
+
+            <button type="button" class="attend-btn" data-value="保留">
+              <img class="attend-mark" src="images/rsvp-mark.png" alt="" aria-hidden="true">
+              <span class="attend-btn-jp">保留</span>
+              <span class="attend-btn-en">Hold</span>
+            </button>
+          </div>
+          <input type="hidden" id="attendance" name="attendance" required>
+          <p class="field-error" id="attendance-error">出欠を選択してください</p>
+
+          <label for="name">お名前<span class="required-badge">必須</span></label>
+          <input type="text" id="name" name="name" placeholder="例）山田　太郎" required>
+
+          <label for="address">ご住所<span class="required-badge">必須</span></label>
+          <input type="text" id="address" name="address" placeholder="例）東京都千代田区三丁目5番7号" required>
+
+          <label for="email">メールアドレス<span class="required-badge">必須</span></label>
+          <input type="email" id="email" name="email" placeholder="例）sample@xxx.com" required>
+
+          <label for="phone">電話番号<span class="required-badge">必須</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="例）0120-200-177" required>
+
+          <div id="allergy-field">
+            <label for="allergy">アレルギーの有無<span class="required-badge">必須</span></label>
+            <input type="text" id="allergy" name="allergy" placeholder="例）あり（甲殻類、小麦）">
+          </div>
+
+          <label for="question">私たちに聞いてみたい事やメッセージなど</label>
+          <p class="field-note">
+            パーティー後にお聞きいただけるポッドキャスト内でお答えさせていただきます！<br>
+            お好きなラジオネームと一緒にぜひお寄せください。
+          </p>
+          <textarea id="question" name="question" rows="4"
+            placeholder="例）2人の好きなお味噌汁の具はなんですか？（30代女性／のびのびヨギ太郎）"></textarea>
+
+          <div class="submit-wrap">
+            <button type="submit" class="submit-btn" id="submit-btn">送信する</button>
+          </div>
+        </form>
+
+        <p id="result-message" role="status" aria-live="polite"></p>
+      </div>
     </section>
 
     <footer class="footer">
