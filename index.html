@@ -77,7 +77,7 @@
     <!-- ==========================================================
          ③-a カウントダウン上の接続セクション
          背景色はヒーローと同じ(白)。横幅いっぱいの画像を1枚差し込める。
-         images/countdown-connector-top.jpg を差し替えてください
+         images/countdown-connector-top.png を差し替えてください
     =========================================================== -->
     <section class="connector connector-top">
       <img class="connector-img" src="images/countdown-connector-top.png" alt="">
@@ -109,7 +109,7 @@
          ③-b カウントダウン下の接続セクション
          背景色はメッセージセクションと同じ。横幅いっぱいの画像を1枚と、
          その上に重なるように配置する「アクセント画像」(サイズ調整可)を1枚差し込める。
-         images/countdown-connector-bottom.jpg / countdown-connector-accent.jpg を差し替えてください
+         images/countdown-connector-bottom.png / countdown-connector-accent.png を差し替えてください
     =========================================================== -->
     <section class="connector connector-bottom">
       <img class="connector-img" src="images/countdown-connector-bottom.png" alt="">
@@ -121,11 +121,11 @@
          ④ メッセージセクション
          修正点：単色背景(#EAE7E4)の上に、サイズ調整できる
          「アクセント画像」を2枚、影なしで背景に溶け込むように配置
-         images/message-accent1.jpg / message-accent2.jpg を差し替えてください
+         images/message-accent1.png / message-accent2.jpg を差し替えてください
     =========================================================== -->
     <section class="message">
-      <!-- アクセント画像2枚。位置・サイズは Invitation.css の
-           .message-accent-1 / .message-accent-2 でそれぞれ調整できる -->
+      <!-- アクセント画像2枚。1枚目は右上、2枚目は左下あたりに配置。
+           位置・サイズは Invitation.css の .message-accent-1 / .message-accent-2 でそれぞれ調整できる -->
       <img class="message-accent-img message-accent-1" src="images/message-accent1.png" alt="">
       <img class="message-accent-img message-accent-2" src="images/message-accent2.png" alt="">
 
@@ -149,9 +149,8 @@
          修正点：
          ・Safari(iPhone)でも正しく表と裏が切り替わるよう
            Invitation.css側でベンダープレフィックスを追加
-         ・「名前」「メッセージ」は、後日手書き文字の透過PNGを
-           はめ込む予定とのことなので、テキストではなく画像の
-           「枠」として用意した（images/groom-name.png 等を差し替えるだけでOK）
+         ・「メッセージ」は、後日手書き文字の透過PNGをはめ込む予定
+           （末尾に署名として名前も入る想定のため、名前用の画像枠は削除した）
     =========================================================== -->
     <section class="profile">
       <div class="profile-card">
@@ -162,9 +161,8 @@
           </span>
         </button>
         <p class="profile-role">新郎</p>
-        <!-- 手書き文字(透過PNG)をはめ込む枠。images/groom-name.png を差し替えてください -->
-        <img class="profile-name-img" src="images/groom-name.png" alt="新郎 佐久間 克">
-        <!-- 手書きメッセージ(透過PNG)をはめ込む枠。images/groom-message.png を差し替えてください -->
+        <!-- 手書きメッセージ(透過PNG・末尾に署名として名前も含む予定)をはめ込む枠。
+             images/groom-message.png を差し替えてください -->
         <img class="profile-message-img" src="images/groom-message.png" alt="新郎からのメッセージ">
       </div>
 
@@ -176,7 +174,6 @@
           </span>
         </button>
         <p class="profile-role">新婦</p>
-        <img class="profile-name-img" src="images/bride-name.png" alt="新婦 佐久間 愛海">
         <img class="profile-message-img" src="images/bride-message.png" alt="新婦からのメッセージ">
       </div>
     </section>
@@ -260,7 +257,7 @@
         <!-- ==========================================================
              ⑨ ご案内セクション
              修正点：
-             ・番号バッジは画像(images/guidance-number-bg.jpg)そのものを
+             ・番号バッジは画像(images/guidance-number-bg.png)そのものを
                背景として使用し、色のオーバーレイは廃止した
              ・重なり順：背景色→パーティ情報〜ご案内の背景画像→
                番号バッジ画像→数字、の順になっている
