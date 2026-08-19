@@ -5,8 +5,8 @@
 :root {
   --color-white: #ffffff;
   --color-cream: #f6f1e8;
-  --color-cream-dark: #ece3d3;   /* 出欠(RSVP)まわりで使っていた色。今回はカウントダウン〜フッターの共通背景色として使用 */
-  --color-message-bg: #f1e9db;   /* メッセージ＆その前後の接続セクションで使う背景色 */
+  --color-cream-dark: #eae7e4;   /* メッセージ以降(プロフィール/ギャラリー/RSVP外側/フッター)の共通背景色 */
+  --color-message-bg: #eae7e4;   /* メッセージ＆その前後の接続セクションもこの色に統一 */
   --color-pink: #cf9c8b;
   --color-pink-dark: #b9806e;
   --color-olive: #5c6b3f;
@@ -108,7 +108,7 @@ button {
   display: block;
 }
 /* アクセント画像：横幅いっぱいにはせず、サイズ・位置を自由に調整できるようにしている。
-   数値(width/right/bottom)を変えるだけでサイズや位置を変更可能 */
+   修正点：影をなくし、背景に溶け込むような配置に変更 */
 .connector-accent-img {
   position: absolute;
   right: 8%;
@@ -116,7 +116,7 @@ button {
   width: 42%;
   max-width: 240px;
   border-radius: 12px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
 }
 
 
@@ -175,11 +175,12 @@ button {
 }
 
 /* アクセント画像共通スタイル。個別の位置・サイズは
-   .message-accent-1 / .message-accent-2 でそれぞれ指定している */
+   .message-accent-1 / .message-accent-2 でそれぞれ指定している。
+   修正点：影をなくし、背景に溶け込むような配置に変更 */
 .message-accent-img {
   position: absolute;
   border-radius: 12px;
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+  box-shadow: none;
   z-index: 0;
 }
 .message-accent-1 {
@@ -196,7 +197,7 @@ button {
 }
 
 /* 本文はアクセント画像より手前(z-index高)に表示する */
-.bg-photo-content {
+.message-content {
   position: relative;
   z-index: 1;
   text-align: center;
@@ -330,29 +331,33 @@ button {
 
 /* ================================================================
    ② ヒーローセクション
-   修正点：背景を白に、写真を縦並びに、飾り文字を「Invitation」に変更
+   修正点：
+   ・写真3枚が上下左に余白なく敷き詰められ、センターラインまで拡大
+   ・「wedding」はヒーロー右上の角に余白なくぴったり配置
+   ・「invitation」はヒーロー左下の角に余白なくぴったり配置
 ================================================================ */
 .hero {
   position: relative;
   min-height: 100vh;
   background: var(--color-white);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 64px 20px;
   overflow: hidden;
+  padding: 0; /* 写真を端まで広げるため、セクション自体の余白はなくす */
 }
 
+/* 右上の角にぴったり配置。transform-originを角に固定することで
+   「余白なく角に密着」した状態を作っている */
 .hero-bg-text {
   position: absolute;
-  top: 50%;
-  right: -6%;
-  transform: translateY(-50%) rotate(90deg);
-  transform-origin: center;
+  top: 0;
+  right: 0;
+  margin: 0;
+  transform-origin: top right;
+  transform: rotate(90deg);
   font-family: var(--font-en-script-bold); /* Yellowtail: Message等より太い専用の筆記体 */
-  font-size: clamp(3.2rem, 18vw, 7rem);
+  font-size: clamp(2.6rem, 14vw, 5.5rem);
+  line-height: 1;
   color: var(--color-olive);
-  opacity: 0.12;
+  opacity: 0.14;
   white-space: nowrap;
   pointer-events: none;
 }
@@ -361,25 +366,26 @@ button {
   position: relative;
   z-index: 1;
   display: flex;
-  flex-direction: row;       /* 常に左右2カラム(スマホでも横並び) */
-  align-items: center;
-  gap: 20px;
+  flex-direction: row;
+  align-items: stretch; /* 写真を上下いっぱいに広げる */
+  min-height: 100vh;
 }
 
-/* 左カラム：写真3枚を縦に並べる。画面幅の4割程度に固定している */
+/* 左カラム：写真3枚。上下左に余白なく敷き詰め、幅はセンターライン(50%)まで */
 .hero-gallery {
   position: relative; /* 透かし文字(hero-watermark)の基準位置にするため */
-  flex: 0 0 40%;
+  flex: 0 0 50%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px; /* 写真同士の隙間はごく小さく。完全に0にしたい場合はここを0に変更 */
 }
 
 .hero-gallery img {
+  flex: 1; /* 3枚で高さを均等に分け合い、上下いっぱいに広がる */
   width: 100%;
-  height: clamp(120px, 24vw, 220px);
+  height: 100%;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 0; /* 端まで広げるため角丸はなくす */
   opacity: 0;
   animation: fadeUp 1s ease forwards;
 }
@@ -387,19 +393,21 @@ button {
 .hero-gallery img:nth-child(2) { animation-delay: 0.4s; }
 .hero-gallery img:nth-child(3) { animation-delay: 0.6s; }
 
-/* 写真の「手前」に重ねる透かし文字「invitation」。
-   画像より前面(z-indexが高い)に、半透明の白文字で配置している */
+/* 左下の角にぴったり配置する透かし文字「invitation」。
+   写真の手前(z-indexが高い)に、半透明の白文字で配置している */
 .hero-watermark {
   position: absolute;
-  left: -4px;
-  top: 50%;
-  transform: translateY(-50%) rotate(-90deg);
-  transform-origin: left center;
+  left: 0;
+  bottom: 0;
+  margin: 0;
+  transform-origin: bottom left;
+  transform: rotate(-90deg);
   z-index: 2;
   font-family: var(--font-en-script-bold);
-  font-size: clamp(1.6rem, 9vw, 2.6rem);
+  font-size: clamp(1.6rem, 10vw, 3rem);
+  line-height: 1;
   letter-spacing: 2px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.75);
   white-space: nowrap;
   pointer-events: none;
 }
@@ -407,7 +415,12 @@ button {
 /* 右カラム：テキストエリア */
 .hero-text {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  padding: 40px 24px;
 }
 
 .hero-name {
@@ -581,15 +594,21 @@ button {
   margin-bottom: 6px;
 }
 
-.profile-name {
-  font-family: var(--font-jp-bold);
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 16px;
+/* 手書き文字(透過PNG)をはめ込む枠。
+   images/groom-name.png / bride-name.png を差し替えるだけで見た目が変わる */
+.profile-name-img {
+  display: block;
+  width: 200px;
+  max-width: 70%;
+  margin: 0 auto 16px;
 }
 
-.profile-comment {
-  font-size: 0.95rem;
+/* 手書きメッセージ(透過PNG)をはめ込む枠 */
+.profile-message-img {
+  display: block;
+  width: 260px;
+  max-width: 90%;
+  margin: 0 auto;
 }
 
 
@@ -637,12 +656,16 @@ button {
 
 
 /* ================================================================
-   ⑦+⑧+⑨ パーティー情報／アクセス／ご案内 をまとめた
-   オリーブグリーンのパネル（背景画像を差し込み可能）
+   ⑦+⑧+⑨ パーティー情報／アクセス／ご案内 をまとめたパネル
+   修正点：重なり順を「背景色→背景画像→テキスト」の3層だけにし、
+   別レイヤーの色オーバーレイは廃止した。
+   文字の可読性は、画像自体に filter で少し暗さを加えることと、
+   テキストに text-shadow を付けることで確保している。
 ================================================================ */
 .panel-olive {
   position: relative;
   overflow: hidden;
+  background: var(--color-olive-dark); /* 背景色：画像が読み込まれるまでの土台の色 */
 }
 
 .panel-olive-img {
@@ -652,25 +675,22 @@ button {
   height: 100%;
   object-fit: cover;
   z-index: 0;
+  /* 画像そのものを少し暗くして、上に乗る文字が読みやすくなるようにしている */
+  filter: brightness(0.55);
 }
-
-/*.panel-olive-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(180deg, rgba(92, 107, 63, 0.92) 0%, rgba(65, 76, 44, 0.94) 10%);
-}*/
 
 .panel-olive-content {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   color: var(--color-text-light);
+  /* 子要素すべてに継承される。写真の上でも文字の輪郭が分かりやすくなる */
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
 }
 
 .party-info,
 .guidance {
   padding: var(--section-padding);
-  /* 親の.panel-oliveがすでに背景を持っているので、ここは透明にする */
+  /* 親の.panel-oliveがすでに背景(色→画像)を持っているので、ここは透明にする */
   background: transparent;
 }
 
@@ -767,11 +787,14 @@ button {
   margin-bottom: 16px;
 }
 
-/* 番号バッジ：images/guidance-number-bg.png を背景に敷き、
+/* 番号バッジ：images/guidance-number-bg.jpg を背景に敷き、
    その上からゴールドの半透明色を重ねて文字を読みやすくしている。
    修正点：以前は正方形(52×52)で cover 指定だったため画像の上下が
    切れてしまっていた。リボン状の縦長サイズにし、background-size を
    contain に変更することで、差し込んだ画像全体が欠けずに収まるようにした。 */
+/* 番号バッジ：色のオーバーレイは廃止し、images/guidance-number-bg.jpg の
+   画像そのものだけを背景として使用する。
+   重なり順：背景色(パネル)→パーティ情報〜ご案内の背景画像→番号バッジ画像→数字 */
 .guidance-number {
   flex-shrink: 0;
   width: 60px;
@@ -784,9 +807,8 @@ button {
   font-weight: 700;
   font-size: 1.2rem;
   border-radius: 4px;
-  background:
-    linear-gradient(rgba(185, 138, 78, 0.82), rgba(185, 138, 78, 0.82)),
-    url("images/guidance-number-bg.png");
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6); /* 画像の上でも数字が読めるように */
+  background-image: url("images/guidance-number-bg.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain; /* 画像が切れないよう cover→contain に変更 */
@@ -811,14 +833,26 @@ button {
 /* ================================================================
    ⑩ RSVPセクション
    修正点：
-   ・出欠まわりの背景色(cream-dark)を、カウントダウン以降の共通色として使う
-   ・RSVPセクションだけは白背景のパネルとして上に重ねる
+   ・セクション全体の背景は#EAE7E4(クリーム)にし、
+     その内側に余白を持たせた白い「紙」のようなカード(.rsvp-card)を重ねる
    ・見出しとリード文の行間を詰めた
    ・送信ボタンを文字サイズに合わせた可変幅ボタンに変更
 ================================================================ */
 .rsvp {
   padding: var(--section-padding);
-  background: var(--color-white); /* RSVP〜送信ボタンまでは白背景を重ねる */
+  background: var(--color-cream-dark); /* #EAE7E4。外側はクリーム背景のまま */
+}
+
+/* 白いカード部分。max-widthと左右autoマージンで中央寄せにし、
+   外側のクリーム色が周囲に見える余白をつくることで
+   「紙の出欠表が置いてある」ような見た目にしている */
+.rsvp-card {
+  max-width: 560px;
+  margin: 0 auto;
+  background: var(--color-white);
+  border-radius: 20px;
+  padding: 48px 28px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
 }
 
 .rsvp .script-heading {
@@ -1044,12 +1078,6 @@ textarea:focus-visible {
    レスポンシブ対応
 ================================================================ */
 @media (min-width: 640px) {
-  .hero-gallery {
-    flex: 0 0 44%;
-  }
-  .hero-gallery img {
-    height: clamp(180px, 22vw, 260px);
-  }
   .profile {
     flex-direction: row;
     justify-content: center;
