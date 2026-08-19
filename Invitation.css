@@ -654,12 +654,12 @@ button {
   z-index: 0;
 }
 
-.panel-olive-overlay {
+/*.panel-olive-overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
   background: linear-gradient(180deg, rgba(92, 107, 63, 0.92) 0%, rgba(65, 76, 44, 0.94) 10%);
-}
+}*/
 
 .panel-olive-content {
   position: relative;
