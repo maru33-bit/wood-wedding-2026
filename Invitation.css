@@ -187,13 +187,13 @@ button {
   width: 34%;
   max-width: 170px;
   top: 28px;
-  left: 16px;
+  right: 16px;
 }
 .message-accent-2 {
   width: 30%;
   max-width: 150px;
   bottom: 28px;
-  right: 16px;
+  left: 16px;
 }
 
 /* 本文はアクセント画像より手前(z-index高)に表示する */
@@ -344,20 +344,23 @@ button {
   padding: 0; /* 写真を端まで広げるため、セクション自体の余白はなくす */
 }
 
-/* 右上の角にぴったり配置。transform-originを角に固定することで
-   「余白なく角に密着」した状態を作っている */
+/* 右上の角にぴったり配置。
+   writing-mode: vertical-rl を使うと「1文字目が上端に来る」形で
+   自然に縦書きになるため、rotateで無理やり回転させるより正確に角へ密着させられる。
+   ※フォントサイズは「文字列全体が高さの約70%になる」目安の値。
+     文字数やフォントを変える場合はここを調整してください。 */
 .hero-bg-text {
   position: absolute;
   top: 0;
   right: 0;
   margin: 0;
-  transform-origin: top right;
-  transform: rotate(90deg);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
   font-family: var(--font-en-script-bold); /* Yellowtail: Message等より太い専用の筆記体 */
-  font-size: clamp(2.6rem, 14vw, 5.5rem);
+  font-size: clamp(2.5rem, 10vh, 6rem); /* 目安：高さの約70%になるサイズ。手動調整推奨 */
   line-height: 1;
-  color: var(--color-olive);
-  opacity: 0.14;
+  color: #545c38;
+  opacity: 0.3;
   white-space: nowrap;
   pointer-events: none;
 }
@@ -377,7 +380,7 @@ button {
   flex: 0 0 50%;
   display: flex;
   flex-direction: column;
-  gap: 4px; /* 写真同士の隙間はごく小さく。完全に0にしたい場合はここを0に変更 */
+  gap: 0; /* 写真同士の隙間を完全になくす */
 }
 
 .hero-gallery img {
@@ -391,23 +394,30 @@ button {
 }
 .hero-gallery img:nth-child(1) { animation-delay: 0.2s; }
 .hero-gallery img:nth-child(2) { animation-delay: 0.4s; }
-.hero-gallery img:nth-child(3) { animation-delay: 0.6s; }
+/* 3枚目の下だけ、スクロール案内の矢印と重ならないよう余白をあける */
+.hero-gallery img:nth-child(3) {
+  animation-delay: 0.6s;
+  margin-bottom: 56px;
+}
 
 /* 左下の角にぴったり配置する透かし文字「invitation」。
-   写真の手前(z-indexが高い)に、半透明の白文字で配置している */
+   写真の手前(z-indexが高い)に配置。writing-mode: vertical-rl だと
+   「1文字目が上・最後の文字が下」の順で縦書きになるため、
+   bottom:0を基準にすると自然に「最後の文字が下端に密着」する形になる。 */
 .hero-watermark {
   position: absolute;
   left: 0;
   bottom: 0;
   margin: 0;
-  transform-origin: bottom left;
-  transform: rotate(-90deg);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
   z-index: 2;
   font-family: var(--font-en-script-bold);
-  font-size: clamp(1.6rem, 10vw, 3rem);
+  font-size: clamp(1.8rem, 7vh, 4rem); /* 目安：高さの約70%になるサイズ。手動調整推奨 */
   line-height: 1;
   letter-spacing: 2px;
-  color: rgba(255, 255, 255, 0.75);
+  color: #e6e0de;
+  opacity: 0.5;
   white-space: nowrap;
   pointer-events: none;
 }
@@ -594,16 +604,7 @@ button {
   margin-bottom: 6px;
 }
 
-/* 手書き文字(透過PNG)をはめ込む枠。
-   images/groom-name.png / bride-name.png を差し替えるだけで見た目が変わる */
-.profile-name-img {
-  display: block;
-  width: 200px;
-  max-width: 70%;
-  margin: 0 auto 16px;
-}
-
-/* 手書きメッセージ(透過PNG)をはめ込む枠 */
+/* 手書きメッセージ(透過PNG・末尾に署名として名前も含む想定)をはめ込む枠 */
 .profile-message-img {
   display: block;
   width: 260px;
@@ -787,12 +788,12 @@ button {
   margin-bottom: 16px;
 }
 
-/* 番号バッジ：images/guidance-number-bg.jpg を背景に敷き、
+/* 番号バッジ：images/guidance-number-bg.png を背景に敷き、
    その上からゴールドの半透明色を重ねて文字を読みやすくしている。
    修正点：以前は正方形(52×52)で cover 指定だったため画像の上下が
    切れてしまっていた。リボン状の縦長サイズにし、background-size を
    contain に変更することで、差し込んだ画像全体が欠けずに収まるようにした。 */
-/* 番号バッジ：色のオーバーレイは廃止し、images/guidance-number-bg.jpg の
+/* 番号バッジ：色のオーバーレイは廃止し、images/guidance-number-bg.png の
    画像そのものだけを背景として使用する。
    重なり順：背景色(パネル)→パーティ情報〜ご案内の背景画像→番号バッジ画像→数字 */
 .guidance-number {
@@ -802,6 +803,9 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* 垂れた布のような画像の形状に合わせ、数字をセンターより少し左に寄せる。
+     padding-rightを大きめにすることで、中央寄せの基準位置を左へずらしている */
+  padding: 0 18px 0 4px;
   color: var(--color-text-light);
   font-family: var(--font-en-serif);
   font-weight: 700;
