@@ -677,7 +677,7 @@ button {
   object-fit: cover;
   z-index: 0;
   /* 画像そのものを少し暗くして、上に乗る文字が読みやすくなるようにしている */
-  filter: brightness(0.55);
+  /* filter: brightness(0.55); */
 }
 
 .panel-olive-content {
