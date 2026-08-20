@@ -357,7 +357,7 @@ button {
   writing-mode: vertical-rl;
   text-orientation: mixed;
   font-family: var(--font-en-script-bold); /* Yellowtail: Message等より太い専用の筆記体 */
-  font-size: clamp(2.5rem, 10vh, 6rem); /* 目安：高さの約70%になるサイズ。手動調整推奨 */
+  font-size: clamp(3.5rem, 14vh, 9rem); /* サイズを拡大。手動調整推奨 */
   line-height: 1;
   color: #545c38;
   opacity: 0.3;
@@ -403,7 +403,9 @@ button {
 /* 左下の角にぴったり配置する透かし文字「invitation」。
    写真の手前(z-indexが高い)に配置。writing-mode: vertical-rl だと
    「1文字目が上・最後の文字が下」の順で縦書きになるため、
-   bottom:0を基準にすると自然に「最後の文字が下端に密着」する形になる。 */
+   bottom:0を基準にすると自然に「最後の文字が下端に密着」する形になる。
+   修正点：文字サイズを拡大。letter-spacingがあると最後の文字の後ろに
+   余分な間隔ができて下端からズレて見えるため削除した。 */
 .hero-watermark {
   position: absolute;
   left: 0;
@@ -413,9 +415,9 @@ button {
   text-orientation: mixed;
   z-index: 2;
   font-family: var(--font-en-script-bold);
-  font-size: clamp(1.8rem, 7vh, 4rem); /* 目安：高さの約70%になるサイズ。手動調整推奨 */
+  font-size: clamp(2.6rem, 11vh, 6.5rem); /* サイズを拡大。手動調整推奨 */
   line-height: 1;
-  letter-spacing: 2px;
+  letter-spacing: 0; /* 最後の文字(n)を下端にきっちり揃えるため0に変更 */
   color: #e6e0de;
   opacity: 0.5;
   white-space: nowrap;
@@ -544,11 +546,20 @@ button {
   max-width: 320px;
 }
 
+/* コインとTap here文字をまとめて配置するための入れ物。
+   position: relative にすることで、中のSVG(coin-tap-label)を
+   コインの円を基準に絶対配置できるようにしている */
+.coin-wrap {
+  position: relative;
+  width: 200px;
+  margin: 0 auto 24px;
+}
+
 .coin {
   display: block;
   width: 200px;
   height: 200px;
-  margin: 0 auto 24px;
+  margin: 0; /* 位置調整は親の.coin-wrap側で行うためリセット */
   padding: 0;
   border: none;
   background: none;
@@ -597,14 +608,30 @@ button {
   transform: rotateY(180deg);
 }
 
-.profile-role {
-  font-size: 0.95rem;
-  letter-spacing: 3px;
-  color: var(--color-olive);
-  margin-bottom: 6px;
+/* コイン右上の縁に沿って表示する「Tap here」文字。
+   SVGのtextPathで円弧(path)に沿わせているので、文字がカーブして見える。
+   コインの円(直径200px)に対して10pxずつ外側に広げたviewBox(220x220)を使い、
+   ちょうど円の縁の上に文字が乗るように配置している。 */
+.coin-tap-label {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 220px;
+  height: 220px;
+  pointer-events: none; /* コインのタップ操作を邪魔しないようにする */
+  overflow: visible;
 }
 
-/* 手書きメッセージ(透過PNG・末尾に署名として名前も含む想定)をはめ込む枠 */
+.coin-tap-label text,
+.coin-tap-label textPath {
+  font-family: var(--font-jp-bold);
+  font-size: 13px;
+  letter-spacing: 1px;
+  fill: var(--color-olive);
+}
+
+/* 手書きメッセージ(透過PNG・末尾に署名として名前も含む想定)をはめ込む枠。
+   修正点：「新郎」「新婦」の文字を削除したため、コインのすぐ下に来るようにした */
 .profile-message-img {
   display: block;
   width: 260px;
@@ -676,8 +703,8 @@ button {
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  /* 画像そのものを少し暗くして、上に乗る文字が読みやすくなるようにしている */
-  /* filter: brightness(0.55); */
+  /* 元々は可読性確保のため filter: brightness(0.55) で暗くしていたが、
+     落ち着いた色味の画像を使う前提になったため削除し、画像そのままを表示する */
 }
 
 .panel-olive-content {
