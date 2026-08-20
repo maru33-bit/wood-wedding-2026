@@ -151,29 +151,48 @@
            Invitation.css側でベンダープレフィックスを追加
          ・「メッセージ」は、後日手書き文字の透過PNGをはめ込む予定
            （末尾に署名として名前も入る想定のため、名前用の画像枠は削除した）
+         ・「新郎」「新婦」の文字は削除し、コインのすぐ下にメッセージ画像が来るようにした
+         ・コインの右上に、円の縁に沿って曲線状の「Tap here」の文字を追加した
+           （SVGのtextPathで円弧に沿わせている。装飾なのでaria-hiddenにしている）
     =========================================================== -->
     <section class="profile">
       <div class="profile-card">
-        <button type="button" class="coin" data-coin aria-label="タップして新郎の写真を切り替える">
-          <span class="coin-inner">
-            <span class="coin-face coin-front"><img src="images/groom-front.jpg" alt="新郎の写真（表）"></span>
-            <span class="coin-face coin-back"><img src="images/groom-back.jpg" alt="新郎の写真（裏）"></span>
-          </span>
-        </button>
-        <p class="profile-role">新郎</p>
+        <div class="coin-wrap">
+          <button type="button" class="coin" data-coin aria-label="タップして新郎の写真を切り替える">
+            <span class="coin-inner">
+              <span class="coin-face coin-front"><img src="images/groom-front.jpg" alt="新郎の写真（表）"></span>
+              <span class="coin-face coin-back"><img src="images/groom-back.jpg" alt="新郎の写真（裏）"></span>
+            </span>
+          </button>
+          <!-- 円の右上の縁に沿って「Tap here」を表示するSVG。
+               id="tapArcGroom" は同じページ内で重複しないよう新郎用に固有の名前にしている -->
+          <svg class="coin-tap-label" viewBox="0 0 220 220" aria-hidden="true">
+            <path id="tapArcGroom" d="M 110,10 A 100,100 0 0 1 210,110" fill="none" />
+            <text>
+              <textPath href="#tapArcGroom" startOffset="50%" text-anchor="middle">Tap here</textPath>
+            </text>
+          </svg>
+        </div>
         <!-- 手書きメッセージ(透過PNG・末尾に署名として名前も含む予定)をはめ込む枠。
              images/groom-message.png を差し替えてください -->
         <img class="profile-message-img" src="images/groom-message.png" alt="新郎からのメッセージ">
       </div>
 
       <div class="profile-card">
-        <button type="button" class="coin" data-coin aria-label="タップして新婦の写真を切り替える">
-          <span class="coin-inner">
-            <span class="coin-face coin-front"><img src="images/bride-front.jpg" alt="新婦の写真（表）"></span>
-            <span class="coin-face coin-back"><img src="images/bride-back.jpg" alt="新婦の写真（裏）"></span>
-          </span>
-        </button>
-        <p class="profile-role">新婦</p>
+        <div class="coin-wrap">
+          <button type="button" class="coin" data-coin aria-label="タップして新婦の写真を切り替える">
+            <span class="coin-inner">
+              <span class="coin-face coin-front"><img src="images/bride-front.jpg" alt="新婦の写真（表）"></span>
+              <span class="coin-face coin-back"><img src="images/bride-back.jpg" alt="新婦の写真（裏）"></span>
+            </span>
+          </button>
+          <svg class="coin-tap-label" viewBox="0 0 220 220" aria-hidden="true">
+            <path id="tapArcBride" d="M 110,10 A 100,100 0 0 1 210,110" fill="none" />
+            <text>
+              <textPath href="#tapArcBride" startOffset="50%" text-anchor="middle">Tap here</textPath>
+            </text>
+          </svg>
+        </div>
         <img class="profile-message-img" src="images/bride-message.png" alt="新婦からのメッセージ">
       </div>
     </section>
