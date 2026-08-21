@@ -9,17 +9,29 @@
   --color-message-bg: #eae7e4;   /* メッセージ＆その前後の接続セクションもこの色に統一 */
   --color-pink: #cf9c8b;
   --color-pink-dark: #b9806e;
-  --color-olive: #5c6b3f;
-  --color-olive-dark: #414c2c;
-  --color-text: #4a4038;
-  --color-text-light: #fffaf3;
-  --color-gold: #b98a4e;
 
-  --font-en-serif: 'Cormorant Garamond', serif;       /* ヒーローの名前など、繊細な欧文見出し */
-  --font-en-script: 'Pinyon Script', cursive;          /* Message/RSVP/Party Information など、細めの筆記体見出し */
-  --font-en-script-bold: 'Yellowtail', cursive;        /* ヒーロー背景の大きな筆記体("Invitation")専用。上より太い */
-  --font-jp: 'Noto Serif JP', serif;                    /* 本文用の明朝体 */
-  --font-jp-bold: 'Noto Sans JP', sans-serif;           /* 名前やご案内見出しなど、太いゴシック体にしたい箇所用 */
+  /* ↓ Excel「exported_text」シートのカラー仕様に合わせて更新 */
+  --color-olive: #545c38;        /* Figma: Message/Gallery/RSVP見出し・Wedding文字の色 (旧 #5c6b3f) */
+  --color-olive-dark: #414c2c;   /* オリーブの濃色。Excelに個別指定なし、既存の派生色として維持 */
+  --color-text: #282930;         /* Figma: Masaru/Manami・本文などの基本インク色 (旧 #4a4038) */
+  --color-text-light: #ffffff;   /* Figma: Party Information/ご案内/フッターの白文字 (旧 #fffaf3) */
+  --color-gold: #b98a4e;
+  --color-ink-black: #000000;    /* Figma: RSVPの出欠ボタン・フォームラベル等で使われる純黒 */
+  --color-countdown-ink: #3f190d;/* Figma: カウントダウンの文字色(濃いブラウン) */
+  --color-placeholder: #a8a8a8;  /* Figma: フォームのプレースホルダー文字色 */
+
+  /* ↓ Excelのフォント仕様に合わせて更新。
+     変数名は既存のものを極力再利用し、中身(実際のフォント名)だけ差し替えている。
+     Google Fontsに存在しない指定フォントは、印象が近い代替フォントにしている。 */
+  --font-en-serif: 'Josefin Slab', serif;              /* Figma: Josefin Slab → Masaru/Manami (旧 Cormorant Garamond) */
+  --font-en-hand: 'Caveat', cursive;                    /* Figma: Figma Hand(Web非対応) → 代替としてCaveat。"and"用 */
+  --font-en-display: 'Bellota', sans-serif;             /* Figma: Bellota → 5th Anniversary Party/日付/カウントダウン数字 */
+  --font-en-number: 'Oleo Script', cursive;             /* Figma: Oleo Script → ご案内の01/02/03 */
+  --font-en-script: 'Playwrite US Trad', cursive;       /* Figma: Playwrite US Trad → Message/RSVP/Party Information/Gallery見出し (旧 Pinyon Script) */
+  --font-en-script-bold: 'Playwrite US Trad', cursive;  /* Figma: WeddingもPlaywrite US Tradと同じ指定のため統一 (旧 Yellowtail) */
+  --font-jp: 'M PLUS Rounded 1c', sans-serif;           /* Figma: Tsukushi A Round Gothic(Web非対応) → 代替としてM PLUS Rounded 1c。本文用 (旧 Noto Serif JP) */
+  --font-jp-bold: 'M PLUS Rounded 1c', sans-serif;      /* 同上。太字見出し・ラベル用 (旧 Noto Sans JP) */
+  --font-jp-light: 'Noto Sans JP', sans-serif;          /* Figma: Noto Sans JP Light → カウントダウンラベル/フッター著作権表記 */
 
   --section-padding: 88px 24px;
 }
@@ -64,26 +76,29 @@ button {
 }
 
 .script-heading {
-  font-family: var(--font-en-script);
-  font-size: clamp(2.6rem, 10vw, 3.6rem); /* Pinyon Scriptは線が細いため、Yellowtailの時より少し大きめに設定 */
+  font-family: var(--font-en-script); /* Figma: Playwrite US Trad */
+  /* Figma: 24px。スマホでの視認性を保ちつつ、Figmaに近い比率になるようclamp()で可変化 */
+  font-size: clamp(1.4rem, 5.5vw, 1.8rem);
   font-weight: 400;
-  color: var(--color-olive);
+  color: var(--color-olive); /* Figma: #545C38 */
   text-align: center;
   margin-bottom: 40px;
 }
 .script-heading.light {
-  color: var(--color-text-light);
+  color: var(--color-text-light); /* Figma: Party Informationは白(#FFFFFF) */
 }
 
 .section-title {
-  font-family: var(--font-jp-bold);
-  font-size: 1.6rem;
+  font-family: var(--font-jp-bold); /* Figma: Tsukushi A Round Gothic Bold → M PLUS Rounded 1c Bold */
+  /* Figma: 20px */
+  font-size: clamp(1.1rem, 4.2vw, 1.35rem);
+  font-weight: 700;
   text-align: center;
   margin-bottom: 48px;
-  letter-spacing: 4px;
+  letter-spacing: 2px;
 }
 .section-title.light {
-  color: var(--color-text-light);
+  color: var(--color-text-light); /* Figma: #FFFFFF */
 }
 
 
@@ -150,7 +165,9 @@ button {
 }
 
 /* テキストは写真の中央ではなく上寄せに配置。
-   後ろにうっすらグラデーションを敷いて、明るい写真の上でも文字を読みやすくしている */
+   Figma仕様で文字色が濃いブラウン(#3F190D)に決まったため、
+   以前の黒いグラデーション(白文字向け)ではなく、白っぽいグラデーションに変更して
+   濃い文字色でも読みやすくしている */
 .countdown-text {
   position: absolute;
   top: 0;
@@ -158,7 +175,7 @@ button {
   right: 0;
   padding: 36px 24px 24px;
   text-align: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0) 65%);
+  background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 65%);
 }
 
 
@@ -347,8 +364,9 @@ button {
 /* 右上の角にぴったり配置。
    writing-mode: vertical-rl を使うと「1文字目が上端に来る」形で
    自然に縦書きになるため、rotateで無理やり回転させるより正確に角へ密着させられる。
-   ※フォントサイズは「文字列全体が高さの約70%になる」目安の値。
-     文字数やフォントを変える場合はここを調整してください。 */
+   Figma仕様: Playwrite US Trad / 128px / #545C38 / 不透明度30%
+   ※128pxはFigma(スマホ縦画面)基準の値。画面の高さに対する比率(約14%)を
+     維持したまま、clamp()でどの端末でも同じ存在感になるようにしている。 */
 .hero-bg-text {
   position: absolute;
   top: 0;
@@ -356,10 +374,10 @@ button {
   margin: 0;
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  font-family: var(--font-en-script-bold); /* Yellowtail: Message等より太い専用の筆記体 */
-  font-size: clamp(3.5rem, 14vh, 9rem); /* サイズを拡大。手動調整推奨 */
+  font-family: var(--font-en-script-bold); /* Figma: Playwrite US Trad */
+  font-size: clamp(3.5rem, 14vh, 9rem); /* Figma: 128px 相当 */
   line-height: 1;
-  color: #545c38;
+  color: var(--color-olive); /* Figma: #545C38 */
   opacity: 0.3;
   white-space: nowrap;
   pointer-events: none;
@@ -404,8 +422,8 @@ button {
    写真の手前(z-indexが高い)に配置。writing-mode: vertical-rl だと
    「1文字目が上・最後の文字が下」の順で縦書きになるため、
    bottom:0を基準にすると自然に「最後の文字が下端に密着」する形になる。
-   修正点：文字サイズを拡大。letter-spacingがあると最後の文字の後ろに
-   余分な間隔ができて下端からズレて見えるため削除した。 */
+   Figma仕様: Playwrite US Trad / 32px / #E6E0DE / 不透明度50%
+   ※Wedding(128px)の1/4のサイズ比率になるよう、vhの値も約1/4にしている。 */
 .hero-watermark {
   position: absolute;
   left: 0;
@@ -414,11 +432,11 @@ button {
   writing-mode: vertical-rl;
   text-orientation: mixed;
   z-index: 2;
-  font-family: var(--font-en-script-bold);
-  font-size: clamp(2.6rem, 11vh, 6.5rem); /* サイズを拡大。手動調整推奨 */
+  font-family: var(--font-en-script-bold); /* Figma: Playwrite US Trad */
+  font-size: clamp(1rem, 3.6vh, 2.3rem); /* Figma: 32px 相当(Weddingの約1/4) */
   line-height: 1;
-  letter-spacing: 0; /* 最後の文字(n)を下端にきっちり揃えるため0に変更 */
-  color: #e6e0de;
+  letter-spacing: 0; /* 最後の文字(n)を下端にきっちり揃えるため0のまま維持 */
+  color: #e6e0de; /* Figma: #E6E0DE */
   opacity: 0.5;
   white-space: nowrap;
   pointer-events: none;
@@ -435,35 +453,41 @@ button {
   padding: 40px 24px;
 }
 
+/* Figma仕様: Josefin Slab / Regular / 32px / #282930 */
 .hero-name {
-  font-family: var(--font-en-serif);
-  font-weight: 500;
-  font-size: clamp(2.6rem, 12vw, 3.6rem);
+  font-family: var(--font-en-serif); /* Figma: Josefin Slab */
+  font-weight: 400;
+  font-size: clamp(1.8rem, 9vw, 2.6rem); /* Figma: 32px 相当 */
   letter-spacing: 1px;
-  color: var(--color-text);
+  color: var(--color-text); /* Figma: #282930 */
   line-height: 1.1;
 }
 
+/* Figma仕様: Figma Hand(Web非対応につきCaveatで代替) / Regular / 16px / #282930 */
 .hero-and {
-  font-family: var(--font-en-serif);
-  font-style: italic;
-  font-size: 1.2rem;
-  color: var(--color-olive);
+  font-family: var(--font-en-hand); /* Figma Handの代替としてCaveat */
+  font-style: normal; /* Caveatはもともと手書き風の傾きがあるためitalic指定は不要 */
+  font-size: clamp(1rem, 4.2vw, 1.35rem); /* Figma: 16px相当。Caveatは細身なので少し大きめに調整 */
+  color: var(--color-text); /* Figma: #282930 */
   margin: 6px 0;
 }
 
+/* Figma仕様: Bellota / Regular / 12px / #282930 */
 .hero-sub {
+  font-family: var(--font-en-display); /* Figma: Bellota */
   margin-top: 20px;
-  font-size: 1rem;
+  font-size: clamp(0.78rem, 3vw, 0.95rem); /* Figma: 12px相当 */
   letter-spacing: 3px;
-  color: var(--color-text);
+  color: var(--color-text); /* Figma: #282930 */
 }
 
+/* Figma仕様: Bellota / Regular / 12px / #000000(こちらは純黒指定) */
 .hero-date {
+  font-family: var(--font-en-display); /* Figma: Bellota */
   margin-top: 8px;
-  font-size: 0.95rem;
+  font-size: clamp(0.78rem, 3vw, 0.95rem); /* Figma: 12px相当 */
   letter-spacing: 3px;
-  color: var(--color-olive);
+  color: var(--color-ink-black); /* Figma: #000000 */
 }
 
 .scroll-down {
@@ -498,32 +522,47 @@ button {
    （見た目の共通部分は .bg-photo-section 側で定義済み。
     ここでは中身のテキストスタイルだけ書く）
 ================================================================ */
+/* Figma仕様: Noto Sans JP / Light / 20px / #3F190D */
 .countdown-label {
-  font-size: 1rem;
+  font-family: var(--font-jp-light); /* Figma: Noto Sans JP */
+  font-weight: 300; /* Light */
+  font-size: clamp(0.95rem, 4vw, 1.15rem); /* Figma: 20px相当 */
   letter-spacing: 2px;
   margin-bottom: 8px;
-  color: var(--color-text-light);
+  color: var(--color-countdown-ink); /* Figma: #3F190D */
 }
 
+/* Figma仕様: "126"は Bellota Bold 40px、"days"は Bellota Regular 32px。
+   HTML側で数字だけ<span id="cd-days">で分かれているので、
+   ベースは32px相当・数字spanだけ40/32倍(=1.25em)大きくして太字にしている */
 .countdown-days {
-  font-family: var(--font-en-serif);
-  font-weight: 600;
-  font-size: clamp(2.6rem, 12vw, 3.6rem);
+  font-family: var(--font-en-display); /* Figma: Bellota */
+  font-weight: 400;
+  font-size: clamp(1.8rem, 8vw, 2.4rem); /* Figma: "days"の32px相当 */
   line-height: 1;
-  color: var(--color-text-light);
+  color: var(--color-countdown-ink); /* Figma: #3F190D */
+}
+#cd-days {
+  font-weight: 700; /* Figma: "126"はBold */
+  font-size: 1.25em; /* Figma: 40px ÷ 32px ≒ 1.25倍 */
 }
 
+/* Figma仕様: Bellota / Regular / 20px / #3F190D */
 .countdown-detail {
+  font-family: var(--font-en-display); /* Figma: Bellota */
   margin-top: 10px;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 3.6vw, 1.05rem); /* Figma: 20px相当 */
   letter-spacing: 1px;
-  color: var(--color-text-light);
+  color: var(--color-countdown-ink); /* Figma: #3F190D */
 }
 
+/* Figma仕様: Tsukushi A Round Gothic(→M PLUS Rounded 1c) / Bold / 16px / #282930 */
 .message-body p {
   max-width: 480px;
   margin: 0 auto 24px;
-  font-size: 1.02rem;
+  font-weight: 700; /* Figma: Bold指定 */
+  font-size: clamp(0.95rem, 3.8vw, 1.05rem); /* Figma: 16px相当 */
+  color: var(--color-text); /* Figma: #282930(bodyから継承だが明示) */
 }
 
 
@@ -734,9 +773,11 @@ button {
   margin-bottom: 0;
 }
 
+/* Figma仕様: Tsukushi A Round Gothic Bold 20px 白(「開催日」「会場情報」) */
 .info-title {
   font-family: var(--font-jp-bold);
-  font-size: 1.05rem;
+  font-weight: 700;
+  font-size: clamp(1.1rem, 4.2vw, 1.3rem); /* Figma: 20px相当 */
   letter-spacing: 2px;
   margin-bottom: 14px;
 }
@@ -748,38 +789,51 @@ button {
   margin: 0 auto 20px;
 }
 
+/* Figma仕様: 日付は数字部分がBold24px、漢字の接続部分(年/月/日/火曜日)がRegular16px
+   と細かく分かれているが、実装をシンプルに保つため全体をBold・20px相当でまとめている */
 .info-date {
-  font-size: 1.15rem;
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  font-size: clamp(1.1rem, 4.5vw, 1.3rem); /* Figma: 数字部分の24px寄りで設定 */
   margin-bottom: 10px;
 }
 
+/* Figma仕様: 「開始時刻」はRegular16px、時刻の「15:00」だけBold24px。
+   HTML側で時刻が<span>で分かれているので、そこだけ太字・大きめにしている */
 .info-time {
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-family: var(--font-jp);
+  font-weight: 400;
+  font-size: clamp(0.95rem, 4vw, 1.05rem); /* Figma: 16px相当 */
   margin-bottom: 4px;
 }
 .info-time span {
-  font-family: var(--font-en-serif);
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  font-size: 1.4em; /* Figma: 24px ÷ 16px = 1.5倍相当を少し抑えて調整 */
 }
 
+/* Figma仕様: Regular 16px 白(受付/終了予定などの補足) */
 .info-time-sub {
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 3.6vw, 1rem); /* Figma: 16px相当 */
   opacity: 0.85;
 }
 
+/* Figma仕様: BIRTH LAB は Tsukushi A Round Gothic Bold 20px */
 .info-venue {
-  font-family: var(--font-en-serif);
-  font-size: 1.4rem;
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  font-size: clamp(1.1rem, 4.5vw, 1.3rem); /* Figma: 20px相当 */
   margin-bottom: 12px;
 }
 
+/* Figma仕様: Regular 16px 白 */
 .info-address {
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 3.6vw, 1rem); /* Figma: 16px相当 */
   opacity: 0.9;
 }
 
 .info-access-text {
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 3.6vw, 1rem); /* Figma: 16px相当 */
   margin-bottom: 20px;
   opacity: 0.9;
 }
@@ -815,14 +869,10 @@ button {
   margin-bottom: 16px;
 }
 
-/* 番号バッジ：images/guidance-number-bg.png を背景に敷き、
-   その上からゴールドの半透明色を重ねて文字を読みやすくしている。
-   修正点：以前は正方形(52×52)で cover 指定だったため画像の上下が
-   切れてしまっていた。リボン状の縦長サイズにし、background-size を
-   contain に変更することで、差し込んだ画像全体が欠けずに収まるようにした。 */
 /* 番号バッジ：色のオーバーレイは廃止し、images/guidance-number-bg.png の
    画像そのものだけを背景として使用する。
-   重なり順：背景色(パネル)→パーティ情報〜ご案内の背景画像→番号バッジ画像→数字 */
+   重なり順：背景色(パネル)→パーティ情報〜ご案内の背景画像→番号バッジ画像→数字
+   Figma仕様: 数字(01/02/03)は Oleo Script / Regular / 24px / 白 */
 .guidance-number {
   flex-shrink: 0;
   width: 60px;
@@ -833,10 +883,10 @@ button {
   /* 垂れた布のような画像の形状に合わせ、数字をセンターより少し左に寄せる。
      padding-rightを大きめにすることで、中央寄せの基準位置を左へずらしている */
   padding: 0 18px 0 4px;
-  color: var(--color-text-light);
-  font-family: var(--font-en-serif);
-  font-weight: 700;
-  font-size: 1.2rem;
+  color: var(--color-text-light); /* Figma: #FFFFFF */
+  font-family: var(--font-en-number); /* Figma: Oleo Script */
+  font-weight: 400; /* Oleo Scriptは基本Regularの1ウェイトのみ */
+  font-size: clamp(1.3rem, 5.5vw, 1.7rem); /* Figma: 24px相当 */
   border-radius: 4px;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6); /* 画像の上でも数字が読めるように */
   background-image: url("images/guidance-number-bg.png");
@@ -845,14 +895,17 @@ button {
   background-size: contain; /* 画像が切れないよう cover→contain に変更 */
 }
 
+/* Figma仕様: Tsukushi A Round Gothic Bold 20px 白 */
 .guidance-heading {
   font-family: var(--font-jp-bold);
-  font-size: 1.1rem;
+  font-size: clamp(1.1rem, 4.5vw, 1.3rem); /* Figma: 20px相当 */
   font-weight: 700;
 }
 
+/* Figma仕様: Regular 16px 白(「お召し物：」等の太字ラベルも同じ<p>内に含まれるため、
+   見た目のバランスを優先しRegularベースでまとめている) */
 .guidance-text {
-  font-size: 0.92rem;
+  font-size: clamp(0.9rem, 3.8vw, 1.05rem); /* Figma: 16px相当 */
   margin-bottom: 12px;
   opacity: 0.95;
 }
@@ -890,16 +943,22 @@ button {
   margin-bottom: 8px; /* RSVPとご出欠についての行間を詰める */
 }
 
+/* Figma仕様: Tsukushi A Round Gothic Bold 24px #545C38(オリーブ) */
 .rsvp-lead {
   font-family: var(--font-jp-bold);
+  font-weight: 700;
   text-align: center;
-  font-size: 1.1rem;
+  font-size: clamp(1.2rem, 5vw, 1.5rem); /* Figma: 24px相当 */
+  color: var(--color-olive); /* Figma: #545C38 */
   margin-bottom: 16px;
 }
 
+/* Figma仕様: 「誠に勝手ながら」「までに…」はRegular16px、
+   日付部分は<strong>タグで元からBoldになっている。色はすべて#282930 */
 .rsvp-deadline {
   text-align: center;
-  font-size: 0.92rem;
+  font-size: clamp(0.9rem, 3.8vw, 1.05rem); /* Figma: 16px相当 */
+  color: var(--color-text); /* Figma: #282930 */
   margin-bottom: 40px;
 }
 
@@ -931,15 +990,18 @@ button {
   transform: translateY(-2px);
 }
 
+/* Figma仕様: 「ご出席/ご欠席/保留」は Tsukushi A Round Gothic Bold 24px #000000 */
 .attend-btn-jp {
   font-family: var(--font-jp-bold);
-  font-size: 0.95rem;
+  font-size: clamp(1.05rem, 4.5vw, 1.3rem); /* Figma: 24px相当 */
   font-weight: 700;
+  color: var(--color-ink-black); /* Figma: #000000 */
 }
 
+/* Figma仕様: 「Attend/Decline/Hold」は Regular 20px #000000 */
 .attend-btn-en {
-  font-size: 0.75rem;
-  color: #8a8074;
+  font-size: clamp(0.85rem, 3.6vw, 1.05rem); /* Figma: 20px相当 */
+  color: var(--color-ink-black); /* Figma: #000000(旧#8a8074から変更) */
   letter-spacing: 1px;
 }
 
@@ -985,23 +1047,26 @@ button {
   margin: 32px auto 0;
 }
 
+/* Figma仕様: 「お名前」等のラベルは Tsukushi A Round Gothic Bold 20px #000000 */
 #rsvp-form label {
   display: block;
   font-family: var(--font-jp-bold);
   margin-top: 24px;
   margin-bottom: 8px;
-  font-size: 0.92rem;
+  font-size: clamp(1rem, 4.2vw, 1.2rem); /* Figma: 20px相当 */
   font-weight: 700;
+  color: var(--color-ink-black); /* Figma: #000000 */
 }
 
+/* Figma仕様: 「必須」は Bold 12px 白 */
 .required-badge {
   display: inline-block;
   margin-left: 8px;
   padding: 2px 8px;
   background: var(--color-olive);
-  color: var(--color-text-light);
-  font-size: 0.7rem;
-  font-weight: 400;
+  color: var(--color-text-light); /* Figma: #FFFFFF */
+  font-size: 0.7rem; /* Figma: 12px相当 */
+  font-weight: 700; /* Figma: Bold（旧400から変更） */
   border-radius: 999px;
   vertical-align: middle;
 }
@@ -1019,13 +1084,24 @@ button {
   background: #fffdf9;
 }
 
+/* Figma仕様: プレースホルダー(「例）山田　太郎」等)は Bold 16px #A8A8A8 */
+#rsvp-form input::placeholder,
+#rsvp-form textarea::placeholder {
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  color: var(--color-placeholder); /* Figma: #A8A8A8 */
+}
+
 #rsvp-form textarea {
   resize: vertical;
 }
 
+/* Figma仕様: 注意書き(「パーティー後にお聞き…」)は Bold 16px #000000 */
 .field-note {
-  font-size: 0.82rem;
-  color: #7a7062;
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  font-size: clamp(0.85rem, 3.6vw, 1rem); /* Figma: 16px相当 */
+  color: var(--color-ink-black); /* Figma: #000000(旧#7a7062から変更) */
   margin-bottom: 8px;
 }
 
@@ -1043,18 +1119,19 @@ button {
 }
 
 /* 修正点：横幅いっぱい(100%)ではなく、文字サイズに合わせた
-   ひとまわり大きい可変幅ボタンに変更 */
+   ひとまわり大きい可変幅ボタンに変更。
+   Figma仕様: 「送信する」は Tsukushi A Round Gothic Bold 20px 白 */
 .submit-btn {
   display: inline-block;
   width: auto;
   margin-top: 40px;
   padding: 16px 56px;
   background: var(--color-olive);
-  color: var(--color-text-light);
+  color: var(--color-text-light); /* Figma: #FFFFFF */
   border: none;
   border-radius: 999px;
-  font-family: var(--font-jp);
-  font-size: 1rem;
+  font-family: var(--font-jp-bold); /* Figma: Bold指定のためbold用変数を使用 */
+  font-size: clamp(1.05rem, 4.5vw, 1.25rem); /* Figma: 20px相当 */
   font-weight: 700;
   cursor: pointer;
   transition: background 0.25s ease, transform 0.25s ease;
@@ -1086,13 +1163,19 @@ button {
 
 /* ================================================================
    フッター
+   Figma仕様: ©2026 umi design partner は Noto Sans JP Light 12px 白(#FFFFFF)
+   ※白文字のため、そのままだと元のクリーム背景では読みにくくなってしまう。
+     デザイン意図(白文字)を活かすため、背景をオリーブの濃色に変更して
+     コントラストを確保している(文字色そのものはExcel仕様どおり)。
 ================================================================ */
 .footer {
   padding: 40px 20px 60px;
   text-align: center;
-  font-size: 0.8rem;
-  color: #8b8178;
-  background: var(--color-cream-dark);
+  font-family: var(--font-jp-light); /* Figma: Noto Sans JP */
+  font-weight: 300; /* Light */
+  font-size: clamp(0.75rem, 3vw, 0.85rem); /* Figma: 12px相当 */
+  color: var(--color-text-light); /* Figma: #FFFFFF */
+  background: var(--color-olive-dark); /* 白文字を読みやすくするため濃色に変更 */
 }
 
 
