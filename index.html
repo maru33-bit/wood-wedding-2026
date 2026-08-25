@@ -61,7 +61,7 @@
     =========================================================== -->
     <section class="hero" id="hero">
       <!-- 右上の角にぴったり配置する「wedding」の縦文字（装飾なのでaria-hidden） -->
-      <div class="hero-bg-text" aria-hidden="true">wedding</div>
+      <div class="hero-bg-text" aria-hidden="true">Wedding</div>
 
       <div class="hero-inner">
         <!-- 左カラム：写真3枚を上下左に余白なく敷き詰める -->
@@ -70,7 +70,7 @@
           <img src="images/hero2.jpg" alt="お二人の写真2">
           <img src="images/hero3.jpg" alt="お二人の写真3">
           <!-- 左下の角にぴったり配置する透かし文字。画像より前面(z-indexが高い)に配置している -->
-          <div class="hero-watermark" aria-hidden="true">invitation</div>
+          <div class="hero-watermark" aria-hidden="true">Invitation</div>
         </div>
 
         <div class="hero-text">
@@ -135,14 +135,16 @@
          images/message-accent1.png / message-accent2.jpg を差し替えてください
     =========================================================== -->
     <section class="message">
-      <!-- アクセント画像2枚。1枚目は右上、2枚目は左下あたりに配置。
-           位置・サイズは Invitation.css の .message-accent-1 / .message-accent-2 でそれぞれ調整できる -->
-      <img class="message-accent-img message-accent-1" src="images/message-accent1.png" alt="">
-      <img class="message-accent-img message-accent-2" src="images/message-accent2.png" alt="">
-
       <div class="message-content">
         <h2 class="script-heading">Message</h2>
+        <!-- アクセント画像2枚は、見出しではなく本文(message-body)を基準に
+             右上・左下へ配置している。位置・サイズ・角度は
+             Invitation.css の .message-accent-1 / .message-accent-2 で調整できる -->
         <div class="message-body">
+          <!-- アクセント1：本文の右上、時計回りに少し傾ける -->
+          <img class="message-accent-img message-accent-1" src="images/message-accent1.png" alt="">
+          <!-- アクセント2：本文の左下 -->
+          <img class="message-accent-img message-accent-2" src="images/message-accent2.png" alt="">
           <p>お世話になっている皆さまへ</p>
           <p>このたび私たちは<br>結婚５周年を迎えることとなりました</p>
           <p>
@@ -177,8 +179,8 @@
           </button>
           <!-- 円の右上の縁に沿って「Tap here」を表示するSVG。
                id="tapArcGroom" は同じページ内で重複しないよう新郎用に固有の名前にしている -->
-          <svg class="coin-tap-label" viewBox="0 0 220 220" aria-hidden="true">
-            <path id="tapArcGroom" d="M 110,10 A 100,100 0 0 1 210,110" fill="none" />
+          <svg class="coin-tap-label" viewBox="0 0 260 260" aria-hidden="true">
+            <path id="tapArcGroom" d="M 130,20 A 110,110 0 0 1 240,130" fill="none" />
             <text>
               <textPath href="#tapArcGroom" startOffset="50%" text-anchor="middle">Tap here</textPath>
             </text>
@@ -197,8 +199,8 @@
               <span class="coin-face coin-back"><img src="images/bride-back.jpg" alt="新婦の写真（裏）"></span>
             </span>
           </button>
-          <svg class="coin-tap-label" viewBox="0 0 220 220" aria-hidden="true">
-            <path id="tapArcBride" d="M 110,10 A 100,100 0 0 1 210,110" fill="none" />
+          <svg class="coin-tap-label" viewBox="0 0 260 260" aria-hidden="true">
+            <path id="tapArcBride" d="M 130,20 A 110,110 0 0 1 240,130" fill="none" />
             <text>
               <textPath href="#tapArcBride" startOffset="50%" text-anchor="middle">Tap here</textPath>
             </text>
@@ -248,12 +250,12 @@
       <div class="panel-olive-content">
 
         <section class="party-info">
-          <h2 class="script-heading light">Party Information</h2>
+          <h2 class="script-heading light">Party<br>Information</h2>
 
           <div class="info-block">
             <p class="info-title">開催日</p>
             <div class="info-divider"></div>
-            <p class="info-date">2026年 11月 3日 火曜日</p>
+            <p class="info-date"><span class="info-date-num">2026</span>年 <span class="info-date-num">11</span>月 <span class="info-date-num">3</span>日 火曜日</p>
             <p class="info-time">開始時刻 <span>15:00</span></p>
             <p class="info-time-sub">受付 14:30 ／ 終了予定 18:00</p>
           </div>
@@ -272,7 +274,7 @@
           <div class="info-block">
             <p class="info-access-text">
               都営大江戸線／東京メトロ南北線<br>
-              「麻布十番駅」1番／4番出口から徒歩1分
+              「麻布十番駅」1番／4番出口から<br>徒歩1分
             </p>
             <div class="map-wrapper">
               <iframe
@@ -294,6 +296,7 @@
         =========================================================== -->
         <section class="guidance">
           <h2 class="section-title light">ご案内</h2>
+          <div class="info-divider info-divider-guidance"></div>
 
           <div class="guidance-item">
             <div class="guidance-heading-row">
@@ -301,11 +304,11 @@
               <p class="guidance-heading">ドレスコード（服装）</p>
             </div>
             <p class="guidance-text">
-              お召し物：ご友人の結婚式等に参列される際の、お気に入りのドレスやスーツでお越しください。
+              <span class="guidance-text-label">お召し物：</span>ご友人の結婚式等に参列される際の お気に入りのドレスやスーツでお越しください
             </p>
             <p class="guidance-text">
-              お足元：立食パーティー形式（ソファやベンチ等のお席あり）となります。
-              足元が疲れぬよう、ローヒールや履き慣れたお靴でお越しいただいても全く問題ございません。
+              <span class="guidance-text-label">お足元：</span>立食パーティー形式（ソファやベンチ等のお席あり）となります<br>
+              足元が疲れぬよう ローヒールや履き慣れたお靴でお越しいただいても全く問題ございません
             </p>
           </div>
 
@@ -315,8 +318,8 @@
               <p class="guidance-heading">会費のご案内</p>
             </div>
             <p class="guidance-text">
-              お一人様 15,000円。
-              受付混雑緩和のため、会費はあらかじめ「お名前を記載した封筒（またはご祝儀袋など）」にお納めのうえ、受付へお渡しいただけますと幸いです。
+              お一人様 15,000円<br>
+              受付混雑緩和のため 会費はあらかじめ「お名前を記載した封筒（またはご祝儀袋など）」にお納めのうえ 受付へお渡しいただけますと幸いです
             </p>
           </div>
 
@@ -326,7 +329,7 @@
               <p class="guidance-heading">お荷物について</p>
             </div>
             <p class="guidance-text">
-              専用クロークのご用意がございませんため、できるだけ身軽なお荷物でお越しいただけますと幸いです。
+              専用クロークのご用意がございませんため できるだけ身軽なお荷物でお越しいただけますと幸いです
             </p>
           </div>
         </section>
@@ -379,7 +382,7 @@
           <p class="field-error" id="attendance-error">出欠を選択してください</p>
 
           <label for="name">お名前<span class="required-badge">必須</span></label>
-          <input type="text" id="name" name="name" placeholder="例）山田　太郎" required>
+          <input type="text" id="name" name="name" placeholder="例）山田 太郎" required>
 
           <label for="address">ご住所<span class="required-badge">必須</span></label>
           <input type="text" id="address" name="address" placeholder="例）東京都千代田区三丁目5番7号" required>
@@ -388,7 +391,7 @@
           <input type="email" id="email" name="email" placeholder="例）sample@xxx.com" required>
 
           <label for="phone">電話番号<span class="required-badge">必須</span></label>
-          <input type="tel" id="phone" name="phone" placeholder="例）0120-200-177" required>
+          <input type="tel" id="phone" name="phone" placeholder="例）0120-123-456" required>
 
           <div id="allergy-field">
             <label for="allergy">アレルギーの有無<span class="required-badge">必須</span></label>
@@ -398,7 +401,7 @@
           <label for="question">私たちに聞いてみたい事やメッセージなど</label>
           <p class="field-note">
             パーティー後にお聞きいただけるポッドキャスト内でお答えさせていただきます！<br>
-            お好きなラジオネームと一緒にぜひお寄せください。
+            お好きなラジオネームと一緒にぜひお寄せください
           </p>
           <textarea id="question" name="question" rows="4"
             placeholder="例）2人の好きなお味噌汁の具はなんですか？（30代女性／のびのびヨギ太郎）"></textarea>
