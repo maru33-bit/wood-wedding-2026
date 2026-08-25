@@ -17,7 +17,7 @@
   --color-text-light: #ffffff;   /* Figma: Party Information/ご案内/フッターの白文字 (旧 #fffaf3) */
   --color-gold: #b98a4e;
   --color-ink-black: #000000;    /* Figma: RSVPの出欠ボタン・フォームラベル等で使われる純黒 */
-  --color-countdown-ink: #3f190d;/* Figma: カウントダウンの文字色(濃いブラウン) */
+  --color-countdown-ink: #3f190d;/* カウントダウンの濃いブラウン色。現在は文字を白に変更したため未使用(将来の調整用に残置) */
   --color-placeholder: #a8a8a8;  /* Figma: フォームのプレースホルダー文字色 */
 
   /* ↓ Excelのフォント仕様に合わせて更新。
@@ -33,7 +33,8 @@
   --font-jp-bold: 'M PLUS Rounded 1c', sans-serif;      /* 同上。太字見出し・ラベル用 (旧 Noto Sans JP) */
   --font-jp-light: 'Noto Sans JP', sans-serif;          /* Figma: Noto Sans JP Light → カウントダウンラベル/フッター著作権表記 */
 
-  --section-padding: 88px 24px;
+  --section-padding: 64px 24px; /* 各セクション上下の余白。88px→64pxに調整して詰めた */
+  --info-divider-width: clamp(200px, 62vw, 257px); /* Figma: 幅257px。それを上限に、狭い画面ではvwで縮小 */
 }
 
 * {
@@ -117,21 +118,41 @@ button {
 .connector-bottom {
   background: var(--color-message-bg); /* メッセージと同じ背景色 */
   padding-bottom: 40px; /* アクセント画像がはみ出す分の余白 */
+  /* 前回、上に重ねる「継ぎ目隠し」の疑似要素を使うため、
+     overflow:hiddenのままだとその疑似要素や反転させた葉っぱ画像が
+     クリップされてしまう。ここだけ visible に上書きしている */
+  overflow: visible;
+}
+
+/* カウントダウンとの継ぎ目を、カウントダウンの色(ピンクベージュ)で覆い隠す。
+   connector-bottomはcountdownより後にあるため、この帯は必ず手前に描画される */
+.connector-bottom::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: #d0aba1; /* countdown側の背景色に合わせる */
+  z-index: 1;
 }
 .connector-img {
   width: 100%;
   display: block;
 }
 /* アクセント画像：横幅いっぱいにはせず、サイズ・位置を自由に調整できるようにしている。
-   修正点：影をなくし、背景に溶け込むような配置に変更 */
+   修正点：
+   ・影をなくし、背景に溶け込むような配置に変更
+   ・上下反転(scaleY(-1))に加えて、反時計回りにさらに回転させている(-8deg→-16deg)
+   ・位置をさらに少し左に移動 */
 .connector-accent-img {
   position: absolute;
-  right: 8%;
-  bottom: 0;
+  left: -4%;
+  top: 6px;
   width: 42%;
   max-width: 240px;
   border-radius: 12px;
-  box-shadow: none;
+  transform: scaleY(-1) rotate(-12deg); /* 上下反転＋反時計回りに回転(はみ出し軽減のため-16deg→-12degに調整) */
 }
 
 
@@ -140,21 +161,43 @@ button {
    ・背景は単色 #D0ABA1
    ・その上に、セクションよりひとまわり小さい写真のカードを重ねる
    ・カウントダウンの文字は写真の「上寄せ」に配置する
+
+   白い継ぎ目対策について：
+   ブラウザがvw/vh基準の可変レイアウトを描画する際、
+   隣り合うセクション同士の境界にサブピクセル単位の誤差が生まれ、
+   ごく細い白い隙間（html/bodyの下地の色）が見えてしまうことがある。
+   margin違いのマイナス値だけでは解消しきれなかったため、
+   「後から重なるセクション側に、境目を覆う帯(疑似要素)を敷く」
+   方式に変更した。疑似要素はDOM上で後にあるセクションほど
+   手前に描画されるため、この順番で確実に隙間を覆い隠せる。
 ================================================================ */
 .countdown {
+  position: relative; /* 疑似要素(::before)の基準位置にするため */
   padding: 56px 24px;
   background: #d0aba1; /* 指定のピンクベージュ */
   display: flex;
   justify-content: center;
 }
 
+/* 上側(connector-top)との継ぎ目を、カウントダウンの色で覆い隠す。
+   countdownはconnector-topより後にあるため、この帯は必ず手前に描画される */
+.countdown::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: #d0aba1;
+  z-index: 1;
+}
+
 .countdown-box {
   position: relative;
   width: 100%;
   max-width: 400px; /* セクション幅より一回り小さくなるよう上限を設定 */
-  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18);
+  /* 修正: 角丸は不要とのことでborder-radiusを削除。シャドウも削除済み */
 }
 
 .countdown-photo {
@@ -165,9 +208,8 @@ button {
 }
 
 /* テキストは写真の中央ではなく上寄せに配置。
-   Figma仕様で文字色が濃いブラウン(#3F190D)に決まったため、
-   以前の黒いグラデーション(白文字向け)ではなく、白っぽいグラデーションに変更して
-   濃い文字色でも読みやすくしている */
+   修正: 背景写真自体で白文字が十分見やすいとのことで、
+   可読性確保用のグラデーションは削除した */
 .countdown-text {
   position: absolute;
   top: 0;
@@ -175,7 +217,6 @@ button {
   right: 0;
   padding: 36px 24px 24px;
   text-align: center;
-  background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 65%);
 }
 
 
@@ -193,27 +234,38 @@ button {
 
 /* アクセント画像共通スタイル。個別の位置・サイズは
    .message-accent-1 / .message-accent-2 でそれぞれ指定している。
-   修正点：影をなくし、背景に溶け込むような配置に変更 */
+   修正点：
+   ・影をなくし、背景に溶け込むような配置に変更
+   ・配置の基準を「メッセージ本文(.message-body)」に変更したため、
+     .message-bodyにposition:relativeを追加している
+   ・z-index: -1 にして、本文テキストより後ろのレイヤーに配置している */
 .message-accent-img {
   position: absolute;
   border-radius: 12px;
-  box-shadow: none;
-  z-index: 0;
+  z-index: -1; /* 本文(.message-body内のp要素)より後ろに表示する */
 }
+/* 本文の右上、少し内側(センター寄り)に配置。時計回りにもう少し傾ける */
 .message-accent-1 {
-  width: 34%;
-  max-width: 170px;
-  top: 28px;
-  right: 16px;
+  width: 40%; /* 修正: 少し大きく(34%→40%) */
+  max-width: 200px; /* 修正: 少し大きく(170px→200px) */
+  top: -10px;
+  right: -4px;
+  transform: rotate(12deg); /* 時計回りにもう少し傾ける(6deg→12deg) */
 }
+/* 本文の左下、少し内側(センター寄り)に配置 */
 .message-accent-2 {
-  width: 30%;
-  max-width: 150px;
-  bottom: 28px;
-  left: 16px;
+  width: 24%; /* 修正: 少し大きく(18%→24%) */
+  max-width: 120px; /* 修正: 少し大きく(90px→120px) */
+  bottom: -4px;
+  left: 6px;
 }
 
-/* 本文はアクセント画像より手前(z-index高)に表示する */
+/* 本文の位置の基準にするため position: relative を指定。
+   アクセント画像はここを基準に絶対配置され、z-indexで背面に回っている */
+.message-body {
+  position: relative;
+}
+
 .message-content {
   position: relative;
   z-index: 1;
@@ -265,7 +317,7 @@ button {
   inset: 0;
   background: var(--color-cream);
   border-radius: 6px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+  /* 修正: シャドウは不要とのことで削除 */
   z-index: 1;
 }
 
@@ -366,12 +418,16 @@ button {
    自然に縦書きになるため、rotateで無理やり回転させるより正確に角へ密着させられる。
    Figma仕様: Playwrite US Trad / 128px / #545C38 / 不透明度30%
    ※128pxはFigma(スマホ縦画面)基準の値。画面の高さに対する比率(約14%)を
-     維持したまま、clamp()でどの端末でも同じ存在感になるようにしている。 */
+     維持したまま、clamp()でどの端末でも同じ存在感になるようにしている。
+   修正: 横方向(右)に見切れるよう変更。縦書きなので「幅」＝文字の太さの
+   方向にあたり、そのぶんを右にずらすことで右端30%が画面外に出て、
+   文字が斜めに切れたように見える。.heroのoverflow:hiddenではみ出た分は隠れる */
 .hero-bg-text {
   position: absolute;
   top: 0;
   right: 0;
   margin: 0;
+  transform: translateX(35%);
   writing-mode: vertical-rl;
   text-orientation: mixed;
   font-family: var(--font-en-script-bold); /* Figma: Playwrite US Trad */
@@ -418,22 +474,25 @@ button {
   margin-bottom: 56px;
 }
 
-/* 左下の角にぴったり配置する透かし文字「invitation」。
+/* 左下の角にぴったり配置する透かし文字「Invitation」。
    写真の手前(z-indexが高い)に配置。writing-mode: vertical-rl だと
    「1文字目が上・最後の文字が下」の順で縦書きになるため、
    bottom:0を基準にすると自然に「最後の文字が下端に密着」する形になる。
-   Figma仕様: Playwrite US Trad / 32px / #E6E0DE / 不透明度50%
-   ※Wedding(128px)の1/4のサイズ比率になるよう、vhの値も約1/4にしている。 */
+   Figma仕様(修正版): Playwrite US Trad / 128px(Weddingと同サイズ) / #E6E0DE / 不透明度50%
+   ※Excelの当初記載(32px)が誤りとのことで、Weddingと同じサイズに修正
+   修正: 横方向(左)に見切れるよう変更。縦書きの「幅」＝文字の太さの方向に
+   左へずらすことで左端30%が画面外に出て、文字が斜めに切れたように見える */
 .hero-watermark {
   position: absolute;
   left: 0;
   bottom: 0;
   margin: 0;
+  transform: translateX(-25%);
   writing-mode: vertical-rl;
   text-orientation: mixed;
   z-index: 2;
   font-family: var(--font-en-script-bold); /* Figma: Playwrite US Trad */
-  font-size: clamp(1rem, 3.6vh, 2.3rem); /* Figma: 32px 相当(Weddingの約1/4) */
+  font-size: clamp(3.5rem, 14vh, 9rem); /* Figma: 128px 相当。hero-bg-textと同じ値に統一 */
   line-height: 1;
   letter-spacing: 0; /* 最後の文字(n)を下端にきっちり揃えるため0のまま維持 */
   color: #e6e0de; /* Figma: #E6E0DE */
@@ -467,7 +526,7 @@ button {
 .hero-and {
   font-family: var(--font-en-hand); /* Figma Handの代替としてCaveat */
   font-style: normal; /* Caveatはもともと手書き風の傾きがあるためitalic指定は不要 */
-  font-size: clamp(1rem, 4.2vw, 1.35rem); /* Figma: 16px相当。Caveatは細身なので少し大きめに調整 */
+  font-size: clamp(1.2rem, 5vw, 1.6rem); /* 修正: サイズを少し拡大 */
   color: var(--color-text); /* Figma: #282930 */
   margin: 6px 0;
 }
@@ -522,14 +581,14 @@ button {
    （見た目の共通部分は .bg-photo-section 側で定義済み。
     ここでは中身のテキストスタイルだけ書く）
 ================================================================ */
-/* Figma仕様: Noto Sans JP / Light / 20px / #3F190D */
+/* Figma仕様(修正版): Noto Sans JP / Light / 20px / 白(#FFFFFF) ※当初の#3F190D指定から変更 */
 .countdown-label {
   font-family: var(--font-jp-light); /* Figma: Noto Sans JP */
   font-weight: 300; /* Light */
   font-size: clamp(0.95rem, 4vw, 1.15rem); /* Figma: 20px相当 */
   letter-spacing: 2px;
   margin-bottom: 8px;
-  color: var(--color-countdown-ink); /* Figma: #3F190D */
+  color: var(--color-text-light); /* 修正: 白(#FFFFFF)に変更 */
 }
 
 /* Figma仕様: "126"は Bellota Bold 40px、"days"は Bellota Regular 32px。
@@ -540,20 +599,20 @@ button {
   font-weight: 400;
   font-size: clamp(1.8rem, 8vw, 2.4rem); /* Figma: "days"の32px相当 */
   line-height: 1;
-  color: var(--color-countdown-ink); /* Figma: #3F190D */
+  color: var(--color-text-light); /* 修正: 白(#FFFFFF)に変更 */
 }
 #cd-days {
   font-weight: 700; /* Figma: "126"はBold */
   font-size: 1.25em; /* Figma: 40px ÷ 32px ≒ 1.25倍 */
 }
 
-/* Figma仕様: Bellota / Regular / 20px / #3F190D */
+/* Figma仕様: Bellota / Regular / 20px / 白(#FFFFFF) */
 .countdown-detail {
   font-family: var(--font-en-display); /* Figma: Bellota */
   margin-top: 10px;
   font-size: clamp(0.85rem, 3.6vw, 1.05rem); /* Figma: 20px相当 */
   letter-spacing: 1px;
-  color: var(--color-countdown-ink); /* Figma: #3F190D */
+  color: var(--color-text-light); /* 修正: 白(#FFFFFF)に変更 */
 }
 
 /* Figma仕様: Tsukushi A Round Gothic(→M PLUS Rounded 1c) / Bold / 16px / #282930 */
@@ -633,7 +692,7 @@ button {
   border: 3px solid var(--color-pink);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+  /* 修正: シャドウは不要とのことで削除 */
 }
 
 .coin-face img {
@@ -649,14 +708,15 @@ button {
 
 /* コイン右上の縁に沿って表示する「Tap here」文字。
    SVGのtextPathで円弧(path)に沿わせているので、文字がカーブして見える。
-   コインの円(直径200px)に対して10pxずつ外側に広げたviewBox(220x220)を使い、
-   ちょうど円の縁の上に文字が乗るように配置している。 */
+   修正: コインの円(半径100px)ぎりぎり重ならない位置まで離すため、
+   円弧の半径を120pxに拡大し、それに合わせてviewBox/配置も260x260に広げた
+   (コイン中心から見て、コインの縁より20px外側を円弧が通る) */
 .coin-tap-label {
   position: absolute;
-  top: -10px;
-  left: -10px;
-  width: 220px;
-  height: 220px;
+  top: -30px;
+  left: -30px;
+  width: 260px;
+  height: 260px;
   pointer-events: none; /* コインのタップ操作を邪魔しないようにする */
   overflow: visible;
 }
@@ -664,17 +724,20 @@ button {
 .coin-tap-label text,
 .coin-tap-label textPath {
   font-family: var(--font-jp-bold);
-  font-size: 13px;
+  font-size: 20px; /* 修正: 16px→20pxにさらに拡大 */
   letter-spacing: 1px;
-  fill: var(--color-olive);
+  fill: var(--color-pink); /* 修正: コインの縁(.coin-faceのborder)と同じ色に変更 */
 }
 
 /* 手書きメッセージ(透過PNG・末尾に署名として名前も含む想定)をはめ込む枠。
-   修正点：「新郎」「新婦」の文字を削除したため、コインのすぐ下に来るようにした */
+   修正点：
+   ・「新郎」「新婦」の文字を削除したため、コインのすぐ下に来るようにした
+   ・257px基準では思ったより大きくならなかったとのことで、
+     257pxの約1.5倍(≒386px)を基準にさらにサイズアップ */
 .profile-message-img {
   display: block;
-  width: 260px;
-  max-width: 90%;
+  width: calc(var(--info-divider-width) * 1.5); /* 修正: 257px相当 → その1.5倍に */
+  max-width: 96%; /* 257px基準の時より大きくなる分、上限も少し広げた */
   margin: 0 auto;
 }
 
@@ -714,7 +777,7 @@ button {
   object-fit: cover;
   border-radius: 12px;
   flex-shrink: 0;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+  /* 修正: シャドウは不要とのことで削除 */
   /* 画像のドラッグ&ドロップ（ブラウザ標準の画像保存ドラッグ）を無効化し、
      スワイプ操作の邪魔にならないようにする */
   -webkit-user-drag: none;
@@ -726,8 +789,8 @@ button {
    ⑦+⑧+⑨ パーティー情報／アクセス／ご案内 をまとめたパネル
    修正点：重なり順を「背景色→背景画像→テキスト」の3層だけにし、
    別レイヤーの色オーバーレイは廃止した。
-   文字の可読性は、画像自体に filter で少し暗さを加えることと、
-   テキストに text-shadow を付けることで確保している。
+   文字シャドウ・画像を暗くするフィルターはいずれも不要とのことで
+   使用していない(落ち着いた色味の画像を使う前提のため)。
 ================================================================ */
 .panel-olive {
   position: relative;
@@ -750,8 +813,7 @@ button {
   position: relative;
   z-index: 1;
   color: var(--color-text-light);
-  /* 子要素すべてに継承される。写真の上でも文字の輪郭が分かりやすくなる */
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+  /* 修正: 文字シャドウは不要とのことで削除 */
 }
 
 .party-info,
@@ -766,7 +828,7 @@ button {
 }
 
 .info-block {
-  max-width: 420px;
+  max-width: var(--info-divider-width); /* 修正: インフォディバイダーの幅を上限にする */
   margin: 0 auto 56px;
 }
 .info-block:last-child {
@@ -782,20 +844,32 @@ button {
   margin-bottom: 14px;
 }
 
+/* 修正: 太さを1px→2pxに、幅も --info-divider-width(改行後のInformationの文字幅目安)に変更 */
 .info-divider {
-  width: 110px; /* スクリーンショットに合わせて線を長めに */
-  height: 1px;
+  width: var(--info-divider-width);
+  height: 2px;
   background: rgba(255, 255, 255, 0.6);
   margin: 0 auto 20px;
 }
 
-/* Figma仕様: 日付は数字部分がBold24px、漢字の接続部分(年/月/日/火曜日)がRegular16px
-   と細かく分かれているが、実装をシンプルに保つため全体をBold・20px相当でまとめている */
+/* 「ご案内」見出し下のディバイダー。次のご案内項目までの余白を少し広めにとる */
+.info-divider-guidance {
+  margin: 0 auto 36px;
+}
+
+/* Figma仕様: 日付は数字部分がBold24px、漢字の接続部分(年/月/日/火曜日)がRegular16px。
+   修正: HTML側で数字を<span class="info-date-num">に分けたので、
+   ここで正確に「数字だけBold・接続部分はRegular」を再現している */
 .info-date {
+  font-family: var(--font-jp); /* ベースはRegular */
+  font-weight: 400;
+  font-size: clamp(0.95rem, 4vw, 1.05rem); /* Figma: 接続部分の16px相当 */
+  margin-bottom: 10px;
+}
+.info-date-num {
   font-family: var(--font-jp-bold);
   font-weight: 700;
-  font-size: clamp(1.1rem, 4.5vw, 1.3rem); /* Figma: 数字部分の24px寄りで設定 */
-  margin-bottom: 10px;
+  font-size: clamp(1.1rem, 4.5vw, 1.3rem); /* Figma: 数字部分の24px相当 */
 }
 
 /* Figma仕様: 「開始時刻」はRegular16px、時刻の「15:00」だけBold24px。
@@ -839,9 +913,8 @@ button {
 }
 
 .map-wrapper {
-  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+  /* 修正: 角丸・シャドウともに不要とのことで削除 */
 }
 
 .map-wrapper iframe {
@@ -849,8 +922,13 @@ button {
 }
 
 /* ---------- ご案内 ---------- */
+/* 修正: .guidance自身にも左右padding(section-padding分・24px×2)がかかっているため、
+   max-widthをそのまま --info-divider-width にすると、
+   パーティ情報側の .info-block (自身にpaddingを持たない) より実質的に狭くなり、
+   インフォディバイダー同士の横位置がずれてしまっていた。
+   paddingぶん(48px)を足して、実質の内側の幅を .info-block と揃えている */
 .guidance {
-  max-width: 620px;
+  max-width: calc(var(--info-divider-width) + 48px);
   margin: 0 auto;
 }
 
@@ -865,7 +943,7 @@ button {
 .guidance-heading-row {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px; /* 修正: 見出しの改行を防ぐため余白を詰めた(16px→10px) */
   margin-bottom: 16px;
 }
 
@@ -888,29 +966,38 @@ button {
   font-weight: 400; /* Oleo Scriptは基本Regularの1ウェイトのみ */
   font-size: clamp(1.3rem, 5.5vw, 1.7rem); /* Figma: 24px相当 */
   border-radius: 4px;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6); /* 画像の上でも数字が読めるように */
   background-image: url("images/guidance-number-bg.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain; /* 画像が切れないよう cover→contain に変更 */
 }
 
-/* Figma仕様: Tsukushi A Round Gothic Bold 20px 白 */
+/* Figma仕様: Tsukushi A Round Gothic Bold 20px 白
+   修正: 「ドレスコード（服装）」が改行されてしまう問題への対応として、
+   white-space:nowrapで改行を禁止し、フォントサイズの上限も少し抑えている */
 .guidance-heading {
   font-family: var(--font-jp-bold);
-  font-size: clamp(1.1rem, 4.5vw, 1.3rem); /* Figma: 20px相当 */
+  font-size: clamp(1rem, 4vw, 1.15rem); /* Figma: 20px相当。改行防止のため上限を少し下げた */
   font-weight: 700;
+  white-space: nowrap;
 }
 
-/* Figma仕様: Regular 16px 白(「お召し物：」等の太字ラベルも同じ<p>内に含まれるため、
-   見た目のバランスを優先しRegularベースでまとめている) */
+/* Figma仕様: 「お召し物：」「お足元：」はBold、それ以外はRegular 16px 白。
+   修正: 以前は<p>全体をRegularでまとめていたが、HTML側で
+   ラベル部分だけ<span class="guidance-text-label">に分けたので、
+   ここでラベルだけBoldにしている */
 .guidance-text {
+  font-family: var(--font-jp); /* ベースはRegular */
   font-size: clamp(0.9rem, 3.8vw, 1.05rem); /* Figma: 16px相当 */
   margin-bottom: 12px;
   opacity: 0.95;
 }
 .guidance-text:last-child {
   margin-bottom: 0;
+}
+.guidance-text-label {
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
 }
 
 
@@ -934,9 +1021,8 @@ button {
   max-width: 560px;
   margin: 0 auto;
   background: var(--color-white);
-  border-radius: 20px;
   padding: 48px 28px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+  /* 修正: 角丸・シャドウともに不要とのことで削除 */
 }
 
 .rsvp .script-heading {
