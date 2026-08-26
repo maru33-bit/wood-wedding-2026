@@ -493,7 +493,7 @@ button {
   top: 0;
   right: 0;
   margin: 0;
-  transform: translateX(35%);
+  transform: translateX(40%);
   writing-mode: vertical-rl;
   text-orientation: mixed;
   font-family: var(--font-en-script-bold); /* Figma: Playwrite US Trad */
@@ -553,7 +553,7 @@ button {
   left: 0;
   bottom: 0;
   margin: 0;
-  transform: translateX(-25%);
+  transform: translateX(-10%);
   writing-mode: vertical-rl;
   text-orientation: mixed;
   z-index: 2;
