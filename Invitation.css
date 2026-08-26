@@ -152,7 +152,7 @@ button {
   width: 42%;
   max-width: 240px;
   border-radius: 12px;
-  transform: scaleY(-1) rotate(-12deg); /* 上下反転＋反時計回りに回転(はみ出し軽減のため-16deg→-12degに調整) */
+  transform: scaleY(-1) rotate(-7deg); /* 上下反転＋反時計回りに回転(はみ出し軽減のため-16deg→-12degに調整) */
 }
 
 
@@ -376,9 +376,6 @@ button {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image:
-    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 6px),
-    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 6px);
   mix-blend-mode: multiply;
   z-index: 1;
 }
