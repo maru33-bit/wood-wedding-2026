@@ -32,20 +32,40 @@
 
   <!-- ==========================================================
        ① 封筒アニメーション（オープニング演出）
+       流れ：
+       ① シーリングスタンプで封がされた封筒が表示される
+       ② タップすると、封筒のフタが開く
+          （シーリングスタンプはフタにくっついたまま、割れずに一緒についてくる）
+       ③ 中の手紙（画像）が出てくる。少し長めに表示してから
+          画面全体がフェードアウトする（タイミングはInvitation.js側で管理）
        修正点：
        ・開く前は手紙(envelope-letter)を完全に透明にしておき、
-         フタ(envelope-flap)と文字が重なって見える問題を解消
+         フタ(envelope-flap)と重なって見える問題を解消
        ・開いた後は z-index を切り替えて、手紙がフタより
          「手前」に来るようにする（Invitation.css側で制御）
+       ・手紙の中身はテキストではなく画像(images/envelope-letter.png)に変更
+       ・シーリングスタンプ(images/envelope-seal.png)を追加
+         → 割ったり剥がれたりはせず、スタンプ全体が「フタ」に
+            そのままくっついた状態でフタと一緒に開くようにするため、
+            HTML上でもフタ(envelope-flap)の中に入れている
   =========================================================== -->
   <div id="envelope-screen" class="envelope-screen">
     <div class="envelope" id="envelope">
       <div class="envelope-body"></div>
       <div class="envelope-letter">
-        <p class="envelope-letter-en">Invitation</p>
-        <p class="envelope-letter-jp">結婚5周年<br>パーティーのご案内</p>
+        <!-- 手紙の中身。images/envelope-letter.png を差し替えるだけで内容を変更できる -->
+        <img src="images/envelope-letter.png" alt="招待状の手紙" class="envelope-letter-img">
       </div>
-      <div class="envelope-flap"></div>
+      <div class="envelope-flap">
+        <!-- シーリングスタンプ。フタの先端(合わせ目)に重なるように配置している。
+             フタの子要素にすることで、フタが開くと一緒に回転してついてくる。
+             割ったり動かしたりはせず、そのままフタにくっついている。
+             envelope-seal-wrap: 位置決め専用（動かない）
+             envelope-seal     : スタンプ本体の画像 -->
+        <div class="envelope-seal-wrap" aria-hidden="true">
+          <img src="images/envelope-seal.png" alt="" class="envelope-seal">
+        </div>
+      </div>
     </div>
     <p class="envelope-hint" id="envelope-hint">タップして封筒を開ける</p>
   </div>
