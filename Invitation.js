@@ -12,23 +12,39 @@
 
 /* ================================================================
    ① 封筒を開くアニメーション
+   流れ：
+   ① タップ → 封筒が開き始める(.is-open)
+      シーリングスタンプはフタ(envelope-flap)の子要素になっているので、
+      割れたりせず、そのままフタにくっついて一緒に回転していく
+   ② 手紙が見える状態を少し長めに保ってから → 画面全体を閉じる
 ================================================================ */
 const envelopeScreen = document.getElementById("envelope-screen");
 const envelope = document.getElementById("envelope");
 const envelopeHint = document.getElementById("envelope-hint");
 
+// 封筒が開いてから、画面を閉じるまで手紙を見せておく時間。
+// 以前は1200msだったが、「手紙をもう少し長く見せたい」とのことで
+// 500ms長い1700msにしている
+const HOLD_AFTER_OPEN_MS = 1700;
+
 document.body.style.overflow = "hidden";
 
 envelopeScreen.addEventListener("click", () => {
-  if (envelope.classList.contains("is-open")) return;
+  // 開いた後の二重クリックを防ぐ
+  if (envelope.classList.contains("is-open")) {
+    return;
+  }
 
   envelopeHint.style.opacity = "0";
+
+  // ① 封筒を開くアニメーションを開始(シーリングスタンプはフタと一緒についてくる)
   envelope.classList.add("is-open");
 
+  // ② 封筒が開いてから HOLD_AFTER_OPEN_MS だけ経ったら、画面全体をフェードアウトさせる
   setTimeout(() => {
     envelopeScreen.classList.add("is-hidden");
     document.body.style.overflow = "";
-  }, 1200);
+  }, HOLD_AFTER_OPEN_MS);
 });
 
 
