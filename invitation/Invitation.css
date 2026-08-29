@@ -1,0 +1,1352 @@
+/* ==============================================================
+   Invitation.css
+   結婚5周年パーティー招待状のスタイルシート（修正版）
+============================================================== */
+:root {
+  --color-white: #ffffff;
+  --color-cream: #f6f1e8;
+  --color-cream-dark: #eae7e4;   /* メッセージ以降(プロフィール/ギャラリー/RSVP外側/フッター)の共通背景色 */
+  --color-message-bg: #eae7e4;   /* メッセージ＆その前後の接続セクションもこの色に統一 */
+  --color-pink: #cf9c8b;
+  --color-pink-dark: #b9806e;
+
+  /* ↓ Excel「exported_text」シートのカラー仕様に合わせて更新 */
+  --color-olive: #545c38;        /* Figma: Message/Gallery/RSVP見出し・Wedding文字の色 (旧 #5c6b3f) */
+  --color-olive-dark: #414c2c;   /* オリーブの濃色。Excelに個別指定なし、既存の派生色として維持 */
+  --color-text: #282930;         /* Figma: Masaru/Manami・本文などの基本インク色 (旧 #4a4038) */
+  --color-text-light: #ffffff;   /* Figma: Party Information/ご案内/フッターの白文字 (旧 #fffaf3) */
+  --color-gold: #b98a4e;
+  --color-ink-black: #000000;    /* Figma: RSVPの出欠ボタン・フォームラベル等で使われる純黒 */
+  --color-countdown-ink: #3f190d;/* カウントダウンの濃いブラウン色。現在は文字を白に変更したため未使用(将来の調整用に残置) */
+  --color-placeholder: #a8a8a8;  /* Figma: フォームのプレースホルダー文字色 */
+
+  /* ↓ Excelのフォント仕様に合わせて更新。
+     変数名は既存のものを極力再利用し、中身(実際のフォント名)だけ差し替えている。
+     Google Fontsに存在しない指定フォントは、印象が近い代替フォントにしている。 */
+  --font-en-serif: 'Josefin Slab', serif;              /* Figma: Josefin Slab → Masaru/Manami (旧 Cormorant Garamond) */
+  --font-en-hand: 'Caveat', cursive;                    /* Figma: Figma Hand(Web非対応) → 代替としてCaveat。"and"用 */
+  --font-en-display: 'Bellota', sans-serif;             /* Figma: Bellota → 5th Anniversary Party/日付/カウントダウン数字 */
+  --font-en-number: 'Oleo Script', cursive;             /* Figma: Oleo Script → ご案内の01/02/03 */
+  --font-en-script: 'Playwrite US Trad', cursive;       /* Figma: Playwrite US Trad → Message/RSVP/Party Information/Gallery見出し (旧 Pinyon Script) */
+  --font-en-script-bold: 'Playwrite US Trad', cursive;  /* Figma: WeddingもPlaywrite US Tradと同じ指定のため統一 (旧 Yellowtail) */
+  --font-jp: 'M PLUS Rounded 1c', sans-serif;           /* Figma: Tsukushi A Round Gothic(Web非対応) → 代替としてM PLUS Rounded 1c。本文用 (旧 Noto Serif JP) */
+  --font-jp-bold: 'M PLUS Rounded 1c', sans-serif;      /* 同上。太字見出し・ラベル用 (旧 Noto Sans JP) */
+  --font-jp-light: 'Noto Sans JP', sans-serif;          /* Figma: Noto Sans JP Light → カウントダウンラベル/フッター著作権表記 */
+
+  --section-padding: 64px 24px; /* 各セクション上下の余白。88px→64pxに調整して詰めた */
+  --info-divider-width: clamp(200px, 62vw, 257px); /* Figma: 幅257px。それを上限に、狭い画面ではvwで縮小 */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-jp);
+  color: var(--color-text);
+  line-height: 1.9;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ボタンのiOS/Safariでの独自見た目をリセットしておく。
+   これをしないとiPhoneで角丸や背景が意図通りに表示されないことがある。 */
+button {
+  font-family: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.script-heading {
+  font-family: var(--font-en-script); /* Figma: Playwrite US Trad */
+  /* Figma: 24px。スマホでの視認性を保ちつつ、Figmaに近い比率になるようclamp()で可変化 */
+  font-size: clamp(1.4rem, 5.5vw, 1.8rem);
+  font-weight: 400;
+  color: var(--color-olive); /* Figma: #545C38 */
+  text-align: center;
+  margin-bottom: 40px;
+}
+.script-heading.light {
+  color: var(--color-text-light); /* Figma: Party Informationは白(#FFFFFF) */
+}
+
+.section-title {
+  font-family: var(--font-jp-bold); /* Figma: Tsukushi A Round Gothic Bold → M PLUS Rounded 1c Bold */
+  /* Figma: 20px */
+  font-size: clamp(1.1rem, 4.2vw, 1.35rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 48px;
+  letter-spacing: 2px;
+}
+.section-title.light {
+  color: var(--color-text-light); /* Figma: #FFFFFF */
+}
+
+
+/* ================================================================
+   ③-a / ③-b カウントダウン上下の「接続セクション」
+   ヒーロー・メッセージそれぞれの背景色を引き継ぎつつ、
+   画像を1枚(＋アクセント画像1枚)差し込めるようにしている
+================================================================ */
+.connector {
+  position: relative;
+  overflow: hidden;
+}
+.connector-top {
+  background: var(--color-white); /* ヒーローと同じ背景色 */
+}
+.connector-bottom {
+  background: var(--color-message-bg); /* メッセージと同じ背景色 */
+  padding-bottom: 40px; /* アクセント画像がはみ出す分の余白 */
+  /* 前回、上に重ねる「継ぎ目隠し」の疑似要素を使うため、
+     overflow:hiddenのままだとその疑似要素や反転させた葉っぱ画像が
+     クリップされてしまう。ここだけ visible に上書きしている */
+  overflow: visible;
+}
+
+/* カウントダウンとの継ぎ目を、カウントダウンの色(ピンクベージュ)で覆い隠す。
+   connector-bottomはcountdownより後にあるため、この帯は必ず手前に描画される */
+.connector-bottom::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: #d0aba1; /* countdown側の背景色に合わせる */
+  z-index: 1;
+}
+.connector-img {
+  width: 100%;
+  display: block;
+}
+/* アクセント画像：横幅いっぱいにはせず、サイズ・位置を自由に調整できるようにしている。
+   修正点：
+   ・影をなくし、背景に溶け込むような配置に変更
+   ・上下反転(scaleY(-1))に加えて、反時計回りにさらに回転させている(-8deg→-16deg)
+   ・位置をさらに少し左に移動 */
+.connector-accent-img {
+  position: absolute;
+  left: -4%;
+  top: 6px;
+  width: 42%;
+  max-width: 240px;
+  border-radius: 12px;
+  transform: scaleY(-1) rotate(-7deg); /* 上下反転＋反時計回りに回転(はみ出し軽減のため-16deg→-12degに調整) */
+}
+
+
+/* ================================================================
+   ③ カウントダウンセクション
+   ・背景は単色 #D0ABA1
+   ・その上に、セクションよりひとまわり小さい写真のカードを重ねる
+   ・カウントダウンの文字は写真の「上寄せ」に配置する
+
+   白い継ぎ目対策について：
+   ブラウザがvw/vh基準の可変レイアウトを描画する際、
+   隣り合うセクション同士の境界にサブピクセル単位の誤差が生まれ、
+   ごく細い白い隙間（html/bodyの下地の色）が見えてしまうことがある。
+   margin違いのマイナス値だけでは解消しきれなかったため、
+   「後から重なるセクション側に、境目を覆う帯(疑似要素)を敷く」
+   方式に変更した。疑似要素はDOM上で後にあるセクションほど
+   手前に描画されるため、この順番で確実に隙間を覆い隠せる。
+================================================================ */
+.countdown {
+  position: relative; /* 疑似要素(::before)の基準位置にするため */
+  padding: 56px 24px;
+  background: #d0aba1; /* 指定のピンクベージュ */
+  display: flex;
+  justify-content: center;
+}
+
+/* 上側(connector-top)との継ぎ目を、カウントダウンの色で覆い隠す。
+   countdownはconnector-topより後にあるため、この帯は必ず手前に描画される */
+.countdown::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: #d0aba1;
+  z-index: 1;
+}
+
+.countdown-box {
+  position: relative;
+  width: 100%;
+  max-width: 400px; /* セクション幅より一回り小さくなるよう上限を設定 */
+  overflow: hidden;
+  /* 修正: 角丸は不要とのことでborder-radiusを削除。シャドウも削除済み */
+}
+
+.countdown-photo {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+}
+
+/* テキストは写真の中央ではなく上寄せに配置。
+   修正: 背景写真自体で白文字が十分見やすいとのことで、
+   可読性確保用のグラデーションは削除した */
+.countdown-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 36px 24px 24px;
+  text-align: center;
+}
+
+
+/* ================================================================
+   ④ メッセージセクション
+   ・背景は単色(--color-message-bg)
+   ・アクセント画像を2枚、サイズ・位置調整可能な形で重ねて配置
+================================================================ */
+.message {
+  position: relative;
+  padding: var(--section-padding);
+  background: var(--color-message-bg);
+  overflow: hidden;
+}
+
+/* アクセント画像共通スタイル。個別の位置・サイズは
+   .message-accent-1 / .message-accent-2 でそれぞれ指定している。
+   修正点：
+   ・影をなくし、背景に溶け込むような配置に変更
+   ・配置の基準を「メッセージ本文(.message-body)」に変更したため、
+     .message-bodyにposition:relativeを追加している
+   ・z-index: -1 にして、本文テキストより後ろのレイヤーに配置している */
+.message-accent-img {
+  position: absolute;
+  border-radius: 12px;
+  z-index: -1; /* 本文(.message-body内のp要素)より後ろに表示する */
+}
+/* 本文の右上、少し内側(センター寄り)に配置。時計回りにもう少し傾ける */
+.message-accent-1 {
+  width: 40%; /* 修正: 少し大きく(34%→40%) */
+  max-width: 200px; /* 修正: 少し大きく(170px→200px) */
+  top: -10px;
+  right: -4px;
+  transform: rotate(12deg); /* 時計回りにもう少し傾ける(6deg→12deg) */
+}
+/* 本文の左下、少し内側(センター寄り)に配置 */
+.message-accent-2 {
+  width: 24%; /* 修正: 少し大きく(18%→24%) */
+  max-width: 120px; /* 修正: 少し大きく(90px→120px) */
+  bottom: -4px;
+  left: 6px;
+}
+
+/* 本文の位置の基準にするため position: relative を指定。
+   アクセント画像はここを基準に絶対配置され、z-indexで背面に回っている */
+.message-body {
+  position: relative;
+}
+
+.message-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+
+/* ================================================================
+   ① 封筒アニメーション
+   流れ：
+   ① 初期状態：シーリングスタンプで封をされた封筒
+   ② タップで .is-open クラスが付き、フタが開く
+      （シーリングスタンプはフタの子要素なので、割れたりせず
+        そのままフタにくっついて一緒に回転してついてくる）
+   （クラスの付け外しのタイミングはInvitation.js側で制御している）
+
+   修正点：
+   ・envelope-letter は開くまで opacity:0 にして、フタと重なって見えるのを解消
+   ・開いた後(.is-open)は、手紙のz-indexをフタより高くし、
+     フタのz-indexを一段階遅れて下げることで、
+     「手紙がフタの手前を通る」ように見せている
+   ・手紙の中身を画像(envelope-letter-img)に変更
+   ・シーリングスタンプ(envelope-seal)を追加。フタの子要素にすることで、
+     割れたりせずそのままフタと一緒に開くようにしている
+================================================================ */
+.envelope-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  background: linear-gradient(160deg, var(--color-pink) 0%, var(--color-cream) 100%);
+  cursor: pointer;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.envelope-screen.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.envelope {
+  position: relative;
+  width: min(78vw, 320px);
+  height: min(78vw, 320px);
+  aspect-ratio: 1 / 0.68;
+  perspective: 1200px; /* 子要素の回転に奥行きを持たせる */
+}
+
+/* 紙の質感（斜め格子の細い織り目）を作る共通のテクスチャ。
+   斜め45度・-45度の極細ストライプを重ねることで、
+   スコットランド紙のような繊細な織り目を表現している。
+   色の濃さは rgba の最後の数値(不透明度)で調整できる */
+.envelope-body {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-cream);
+  background-image:
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.035) 0px, rgba(0, 0, 0, 0.035) 1px, transparent 1px, transparent 6px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.035) 0px, rgba(0, 0, 0, 0.035) 1px, transparent 1px, transparent 6px);
+  border-radius: 6px;
+  /* 修正: シャドウは不要とのことで削除 */
+  z-index: 1;
+}
+
+.envelope-letter {
+  position: absolute; /* 絶対配置。::afterの基準位置にもなる */
+  left: 8%;
+  right: 8%;
+  top: 6%;
+  bottom: 10%;
+  background: #fffdf9;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  overflow: hidden;
+  transform: translateY(6%);
+  opacity: 0; /* 開くまでは完全に透明にして、フタと重なって見えるのを防ぐ */
+  z-index: 2;
+  transition:
+    transform 1s ease 0.15s,
+    opacity 0.5s ease 0.2s,
+    z-index 0s linear 0s;
+}
+
+/* 手紙の中身の画像。枠内に収まるようcontainで表示する */
+.envelope-letter-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: relative;
+  z-index: 0;
+}
+
+/* 手紙の画像の上に紙の織り目を重ねる。
+   mix-blend-mode: multiply で画像と自然になじませている */
+.envelope-letter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  z-index: 1;
+}
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  border-left: calc(min(78vw, 320px) / 2) solid transparent;
+  border-right: calc(min(78vw, 320px) / 2) solid transparent;
+  border-top: calc(min(78vw, 320px) * 0.42) solid var(--color-pink-dark);
+  transform-origin: top center;
+  z-index: 3;
+  transition: transform 1s ease, z-index 0s linear 0.5s; /* 0.5秒後(=半分回転した頃)にz-indexを切り替える */
+  /* フタ(三角形)にも同じ織り目を重ねる。border三角形はbackground-imageが
+     表示されないため、::after で三角形の底辺側に薄く帯を重ねて質感を補っている */
+  position: relative;
+}
+.envelope-flap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.08) 0px, rgba(0, 0, 0, 0.08) 1px, transparent 1px, transparent 5px);
+  pointer-events: none;
+}
+
+/* シーリングスタンプの「位置決め」専用の入れ物。
+   フタ(envelope-flap)の子要素になっている。
+   ポイント1：.envelope-flapはborderだけで三角形を作っている特殊な要素で、
+   絶対配置される子要素の基準点(0,0)は、実はこの三角形の「先端(頂点)」に
+   ぴったり一致する(borderの厚み分だけ内側にずれる、というCSSの仕組みを利用)。
+   そのため top:0; left:0; を指定するだけで先端に配置でき、
+   transform: translate(-50%, -50%) でスタンプの中心をその点に合わせている。
+   ポイント2(不具合修正)：同じ理由で .envelope-flap の「内側の幅」も実質0になる。
+   そのため width に % を使うと 0%(=画像が消える) になってしまっていた。
+   %ではなく .envelope本体と同じ min(vw, px) の指定に変更し、解決している。 */
+.envelope-seal-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: min(23vw, 96px);
+  height: min(23vw, 96px);
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* スタンプ本体。割ったり動かしたりはせず、フタにそのままくっついている状態。
+   フタ(envelope-flap)自体がrotateXで開く時、子要素であるスタンプも
+   自然に一緒についていく(スタンプ自身には特別なアニメーションは付けていない) */
+.envelope-seal {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 封筒が開いた時のアニメーション本体 */
+.envelope.is-open .envelope-letter {
+  transform: translateY(-38%);
+  opacity: 1;
+  z-index: 4; /* フタより手前に来るようにする */
+}
+
+.envelope.is-open .envelope-flap {
+  transform: rotateX(180deg);
+  z-index: 1; /* 手紙より奥に下がる */
+}
+
+.envelope-hint {
+  font-family: var(--font-jp);
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  color: var(--color-text);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+
+/* ================================================================
+   ② ヒーローセクション
+   修正点：
+   ・写真3枚が上下左に余白なく敷き詰められ、センターラインまで拡大
+   ・「wedding」はヒーロー右上の角に余白なくぴったり配置
+   ・「invitation」はヒーロー左下の角に余白なくぴったり配置
+================================================================ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  background: var(--color-white);
+  overflow: hidden;
+  padding: 0; /* 写真を端まで広げるため、セクション自体の余白はなくす */
+}
+
+/* 右上の角にぴったり配置。
+   writing-mode: vertical-rl を使うと「1文字目が上端に来る」形で
+   自然に縦書きになるため、rotateで無理やり回転させるより正確に角へ密着させられる。
+   Figma仕様: Playwrite US Trad / 128px / #545C38 / 不透明度30%
+   ※128pxはFigma(スマホ縦画面)基準の値。画面の高さに対する比率(約14%)を
+     維持したまま、clamp()でどの端末でも同じ存在感になるようにしている。
+   修正: 横方向(右)に見切れるよう変更。縦書きなので「幅」＝文字の太さの
+   方向にあたり、そのぶんを右にずらすことで右端30%が画面外に出て、
+   文字が斜めに切れたように見える。.heroのoverflow:hiddenではみ出た分は隠れる */
+.hero-bg-text {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  transform: translateX(40%);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-family: var(--font-en-script-bold); /* Figma: Playwrite US Trad */
+  font-size: clamp(3.5rem, 14vh, 9rem); /* Figma: 128px 相当 */
+  line-height: 1;
+  color: var(--color-olive); /* Figma: #545C38 */
+  opacity: 0.3;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch; /* 写真を上下いっぱいに広げる */
+  min-height: 100vh;
+}
+
+/* 左カラム：写真3枚。上下左に余白なく敷き詰め、幅はセンターライン(50%)まで */
+.hero-gallery {
+  position: relative; /* 透かし文字(hero-watermark)の基準位置にするため */
+  flex: 0 0 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* 写真同士の隙間を完全になくす */
+}
+
+.hero-gallery img {
+  flex: 1; /* 3枚で高さを均等に分け合い、上下いっぱいに広がる */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0; /* 端まで広げるため角丸はなくす */
+  opacity: 0;
+  animation: fadeUp 1s ease forwards;
+}
+.hero-gallery img:nth-child(1) { animation-delay: 0.2s; }
+.hero-gallery img:nth-child(2) { animation-delay: 0.4s; }
+/* 3枚目の下だけ、スクロール案内の矢印と重ならないよう余白をあける */
+.hero-gallery img:nth-child(3) {
+  animation-delay: 0.6s;
+  margin-bottom: 56px;
+}
+
+/* 左下の角にぴったり配置する透かし文字「Invitation」。
+   写真の手前(z-indexが高い)に配置。writing-mode: vertical-rl だと
+   「1文字目が上・最後の文字が下」の順で縦書きになるため、
+   bottom:0を基準にすると自然に「最後の文字が下端に密着」する形になる。
+   Figma仕様(修正版): Playwrite US Trad / 128px(Weddingと同サイズ) / #E6E0DE / 不透明度50%
+   ※Excelの当初記載(32px)が誤りとのことで、Weddingと同じサイズに修正
+   修正: 横方向(左)に見切れるよう変更。縦書きの「幅」＝文字の太さの方向に
+   左へずらすことで左端30%が画面外に出て、文字が斜めに切れたように見える */
+.hero-watermark {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 0;
+  transform: translateX(-10%);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  z-index: 2;
+  font-family: var(--font-en-script-bold); /* Figma: Playwrite US Trad */
+  font-size: clamp(3.5rem, 14vh, 9rem); /* Figma: 128px 相当。hero-bg-textと同じ値に統一 */
+  line-height: 1;
+  letter-spacing: 0; /* 最後の文字(n)を下端にきっちり揃えるため0のまま維持 */
+  color: #e6e0de; /* Figma: #E6E0DE */
+  opacity: 0.5;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* 右カラム：テキストエリア */
+.hero-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+}
+
+/* Figma仕様: Josefin Slab / Regular / 32px / #282930 */
+.hero-name {
+  font-family: var(--font-en-serif); /* Figma: Josefin Slab */
+  font-weight: 400;
+  font-size: clamp(1.8rem, 9vw, 2.6rem); /* Figma: 32px 相当 */
+  letter-spacing: 1px;
+  color: var(--color-text); /* Figma: #282930 */
+  line-height: 1.1;
+}
+
+/* Figma仕様: Figma Hand(Web非対応につきCaveatで代替) / Regular / 16px / #282930 */
+.hero-and {
+  font-family: var(--font-en-hand); /* Figma Handの代替としてCaveat */
+  font-style: normal; /* Caveatはもともと手書き風の傾きがあるためitalic指定は不要 */
+  font-size: clamp(1.2rem, 5vw, 1.6rem); /* 修正: サイズを少し拡大 */
+  color: var(--color-text); /* Figma: #282930 */
+  margin: 6px 0;
+}
+
+/* Figma仕様: Bellota / Regular / 12px / #282930 */
+.hero-sub {
+  font-family: var(--font-en-display); /* Figma: Bellota */
+  margin-top: 20px;
+  font-size: clamp(0.78rem, 3vw, 0.95rem); /* Figma: 12px相当 */
+  letter-spacing: 3px;
+  color: var(--color-text); /* Figma: #282930 */
+}
+
+/* Figma仕様: Bellota / Regular / 12px / #000000(こちらは純黒指定) */
+.hero-date {
+  font-family: var(--font-en-display); /* Figma: Bellota */
+  margin-top: 8px;
+  font-size: clamp(0.78rem, 3vw, 0.95rem); /* Figma: 12px相当 */
+  letter-spacing: 3px;
+  color: var(--color-ink-black); /* Figma: #000000 */
+}
+
+.scroll-down {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.scroll-down span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--color-olive);
+  border-bottom: 2px solid var(--color-olive);
+  transform: rotate(45deg);
+  animation: bounceDown 1.6s ease-in-out infinite;
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 0.4; }
+  50% { transform: rotate(45deg) translate(6px, 6px); opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ================================================================
+   ③④ カウントダウン／メッセージ
+   （見た目の共通部分は .bg-photo-section 側で定義済み。
+    ここでは中身のテキストスタイルだけ書く）
+================================================================ */
+/* Figma仕様(修正版): Noto Sans JP / Light / 20px / 白(#FFFFFF) ※当初の#3F190D指定から変更 */
+.countdown-label {
+  font-family: var(--font-jp-light); /* Figma: Noto Sans JP */
+  font-weight: 300; /* Light */
+  font-size: clamp(0.95rem, 4vw, 1.15rem); /* Figma: 20px相当 */
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  color: var(--color-text-light); /* 修正: 白(#FFFFFF)に変更 */
+}
+
+/* Figma仕様: "126"は Bellota Bold 40px、"days"は Bellota Regular 32px。
+   HTML側で数字だけ<span id="cd-days">で分かれているので、
+   ベースは32px相当・数字spanだけ40/32倍(=1.25em)大きくして太字にしている */
+.countdown-days {
+  font-family: var(--font-en-display); /* Figma: Bellota */
+  font-weight: 400;
+  font-size: clamp(1.8rem, 8vw, 2.4rem); /* Figma: "days"の32px相当 */
+  line-height: 1;
+  color: var(--color-text-light); /* 修正: 白(#FFFFFF)に変更 */
+}
+#cd-days {
+  font-weight: 700; /* Figma: "126"はBold */
+  font-size: 1.25em; /* Figma: 40px ÷ 32px ≒ 1.25倍 */
+}
+
+/* Figma仕様: Bellota / Regular / 20px / 白(#FFFFFF) */
+.countdown-detail {
+  font-family: var(--font-en-display); /* Figma: Bellota */
+  margin-top: 10px;
+  font-size: clamp(0.85rem, 3.6vw, 1.05rem); /* Figma: 20px相当 */
+  letter-spacing: 1px;
+  color: var(--color-text-light); /* 修正: 白(#FFFFFF)に変更 */
+}
+
+/* Figma仕様: Tsukushi A Round Gothic(→M PLUS Rounded 1c) / Bold / 16px / #282930 */
+.message-body p {
+  max-width: 480px;
+  margin: 0 auto 24px;
+  font-weight: 700; /* Figma: Bold指定 */
+  font-size: clamp(0.95rem, 3.8vw, 1.05rem); /* Figma: 16px相当 */
+  color: var(--color-text); /* Figma: #282930(bodyから継承だが明示) */
+}
+
+
+/* ================================================================
+   ⑤ プロフィールセクション（コイン反転写真）
+   修正点：Safariでも正しく表裏が切り替わるよう
+   -webkit- プレフィックス付きのプロパティを追加している
+================================================================ */
+.profile {
+  padding: var(--section-padding);
+  background: var(--color-cream-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 72px;
+}
+
+.profile-card {
+  text-align: center;
+  max-width: 320px;
+}
+
+/* コインとTap here文字をまとめて配置するための入れ物。
+   position: relative にすることで、中のSVG(coin-tap-label)を
+   コインの円を基準に絶対配置できるようにしている */
+.coin-wrap {
+  position: relative;
+  width: 200px;
+  margin: 0 auto 24px;
+}
+
+.coin {
+  display: block;
+  width: 200px;
+  height: 200px;
+  margin: 0; /* 位置調整は親の.coin-wrap側で行うためリセット */
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+  border-radius: 50%;
+}
+
+.coin-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transition: -webkit-transform 0.9s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transition: transform 0.9s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.coin.is-flipped .coin-inner {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+.coin-face {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--color-pink);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* 修正: シャドウは不要とのことで削除 */
+}
+
+.coin-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.coin-back {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+/* コイン右上の縁に沿って表示する「Tap here」文字。
+   SVGのtextPathで円弧(path)に沿わせているので、文字がカーブして見える。
+   修正: コインの円(半径100px)ぎりぎり重ならない位置まで離すため、
+   円弧の半径を120pxに拡大し、それに合わせてviewBox/配置も260x260に広げた
+   (コイン中心から見て、コインの縁より20px外側を円弧が通る) */
+.coin-tap-label {
+  position: absolute;
+  top: -30px;
+  left: -30px;
+  width: 260px;
+  height: 260px;
+  pointer-events: none; /* コインのタップ操作を邪魔しないようにする */
+  overflow: visible;
+}
+
+.coin-tap-label text,
+.coin-tap-label textPath {
+  font-family: var(--font-jp-bold);
+  font-size: 20px; /* 修正: 16px→20pxにさらに拡大 */
+  letter-spacing: 1px;
+  fill: var(--color-pink); /* 修正: コインの縁(.coin-faceのborder)と同じ色に変更 */
+}
+
+/* 手書きメッセージ(透過PNG・末尾に署名として名前も含む想定)をはめ込む枠。
+   修正点：
+   ・「新郎」「新婦」の文字を削除したため、コインのすぐ下に来るようにした
+   ・257px基準では思ったより大きくならなかったとのことで、
+     257pxの約1.5倍(≒386px)を基準にさらにサイズアップ */
+.profile-message-img {
+  display: block;
+  width: calc(var(--info-divider-width) * 1.5); /* 修正: 257px相当 → その1.5倍に */
+  max-width: 96%; /* 257px基準の時より大きくなる分、上限も少し広げた */
+  margin: 0 auto;
+}
+
+
+/* ================================================================
+   ⑥ ギャラリー
+   修正点：
+   ・オリーブ背景をやめて、他と同じ地色(cream-dark)にした
+   ・自動アニメーションのCSS keyframesはやめ、
+     JS(Invitation.js)がscrollLeftを動かす方式に変更。
+     これにより「触ったらドラッグでも動かせる」を実現している
+================================================================ */
+.gallery {
+  padding: var(--section-padding);
+  background: var(--color-cream-dark);
+}
+
+.gallery-marquee {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  /* スマホでの横スクロールを指でなめらかに操作できるようにする */
+  -webkit-overflow-scrolling: touch;
+  /* スクロールバーの見た目を控えめにする（対応ブラウザのみ） */
+  scrollbar-width: thin;
+}
+
+.gallery-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+}
+
+.gallery-track img {
+  width: 220px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+  /* 修正: シャドウは不要とのことで削除 */
+  /* 画像のドラッグ&ドロップ（ブラウザ標準の画像保存ドラッグ）を無効化し、
+     スワイプ操作の邪魔にならないようにする */
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+
+/* ================================================================
+   ⑦+⑧+⑨ パーティー情報／アクセス／ご案内 をまとめたパネル
+   修正点：重なり順を「背景色→背景画像→テキスト」の3層だけにし、
+   別レイヤーの色オーバーレイは廃止した。
+   文字シャドウ・画像を暗くするフィルターはいずれも不要とのことで
+   使用していない(落ち着いた色味の画像を使う前提のため)。
+================================================================ */
+.panel-olive {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-olive-dark); /* 背景色：画像が読み込まれるまでの土台の色 */
+}
+
+.panel-olive-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  /* 元々は可読性確保のため filter: brightness(0.55) で暗くしていたが、
+     落ち着いた色味の画像を使う前提になったため削除し、画像そのままを表示する */
+}
+
+.panel-olive-content {
+  position: relative;
+  z-index: 1;
+  color: var(--color-text-light);
+  /* 修正: 文字シャドウは不要とのことで削除 */
+}
+
+.party-info,
+.guidance {
+  padding: var(--section-padding);
+  /* 親の.panel-oliveがすでに背景(色→画像)を持っているので、ここは透明にする */
+  background: transparent;
+}
+
+.party-info {
+  text-align: center;
+}
+
+.info-block {
+  max-width: var(--info-divider-width); /* 修正: インフォディバイダーの幅を上限にする */
+  margin: 0 auto 56px;
+}
+.info-block:last-child {
+  margin-bottom: 0;
+}
+
+/* Figma仕様: Tsukushi A Round Gothic Bold 20px 白(「開催日」「会場情報」) */
+.info-title {
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  font-size: clamp(1.1rem, 4.2vw, 1.3rem); /* Figma: 20px相当 */
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+/* 修正: 太さを1px→2pxに、幅も --info-divider-width(改行後のInformationの文字幅目安)に変更 */
+.info-divider {
+  width: var(--info-divider-width);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.6);
+  margin: 0 auto 20px;
+}
+
+/* 「ご案内」見出し下のディバイダー。次のご案内項目までの余白を少し広めにとる */
+.info-divider-guidance {
+  margin: 0 auto 36px;
+}
+
+/* Figma仕様: 日付は数字部分がBold24px、漢字の接続部分(年/月/日/火曜日)がRegular16px。
+   修正: HTML側で数字を<span class="info-date-num">に分けたので、
+   ここで正確に「数字だけBold・接続部分はRegular」を再現している */
+.info-date {
+  font-family: var(--font-jp); /* ベースはRegular */
+  font-weight: 400;
+  font-size: clamp(0.95rem, 4vw, 1.05rem); /* Figma: 接続部分の16px相当 */
+  margin-bottom: 10px;
+}
+.info-date-num {
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  font-size: clamp(1.1rem, 4.5vw, 1.3rem); /* Figma: 数字部分の24px相当 */
+}
+
+/* Figma仕様: 「開始時刻」はRegular16px、時刻の「15:00」だけBold24px。
+   HTML側で時刻が<span>で分かれているので、そこだけ太字・大きめにしている */
+.info-time {
+  font-family: var(--font-jp);
+  font-weight: 400;
+  font-size: clamp(0.95rem, 4vw, 1.05rem); /* Figma: 16px相当 */
+  margin-bottom: 4px;
+}
+.info-time span {
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  font-size: 1.4em; /* Figma: 24px ÷ 16px = 1.5倍相当を少し抑えて調整 */
+}
+
+/* Figma仕様: Regular 16px 白(受付/終了予定などの補足) */
+.info-time-sub {
+  font-size: clamp(0.85rem, 3.6vw, 1rem); /* Figma: 16px相当 */
+  opacity: 0.85;
+}
+
+/* Figma仕様: BIRTH LAB は Tsukushi A Round Gothic Bold 20px */
+.info-venue {
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  font-size: clamp(1.1rem, 4.5vw, 1.3rem); /* Figma: 20px相当 */
+  margin-bottom: 12px;
+}
+
+/* Figma仕様: Regular 16px 白 */
+.info-address {
+  font-size: clamp(0.85rem, 3.6vw, 1rem); /* Figma: 16px相当 */
+  opacity: 0.9;
+}
+
+.info-access-text {
+  font-size: clamp(0.85rem, 3.6vw, 1rem); /* Figma: 16px相当 */
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.map-wrapper {
+  overflow: hidden;
+  /* 修正: 角丸・シャドウともに不要とのことで削除 */
+}
+
+.map-wrapper iframe {
+  display: block;
+}
+
+/* ---------- ご案内 ---------- */
+/* 修正: .guidance自身にも左右padding(section-padding分・24px×2)がかかっているため、
+   max-widthをそのまま --info-divider-width にすると、
+   パーティ情報側の .info-block (自身にpaddingを持たない) より実質的に狭くなり、
+   インフォディバイダー同士の横位置がずれてしまっていた。
+   paddingぶん(48px)を足して、実質の内側の幅を .info-block と揃えている */
+.guidance {
+  max-width: calc(var(--info-divider-width) + 48px);
+  margin: 0 auto;
+}
+
+.guidance-item {
+  margin-bottom: 48px;
+}
+.guidance-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 番号(01)とタイトルを1つの見出し行としてまとめる */
+.guidance-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 修正: 見出しの改行を防ぐため余白を詰めた(16px→10px) */
+  margin-bottom: 16px;
+}
+
+/* 番号バッジ：色のオーバーレイは廃止し、images/guidance-number-bg.png の
+   画像そのものだけを背景として使用する。
+   重なり順：背景色(パネル)→パーティ情報〜ご案内の背景画像→番号バッジ画像→数字
+   Figma仕様: 数字(01/02/03)は Oleo Script / Regular / 24px / 白 */
+.guidance-number {
+  flex-shrink: 0;
+  width: 60px;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 垂れた布のような画像の形状に合わせ、数字をセンターより少し左に寄せる。
+     padding-rightを大きめにすることで、中央寄せの基準位置を左へずらしている */
+  padding: 0 18px 0 4px;
+  color: var(--color-text-light); /* Figma: #FFFFFF */
+  font-family: var(--font-en-number); /* Figma: Oleo Script */
+  font-weight: 400; /* Oleo Scriptは基本Regularの1ウェイトのみ */
+  font-size: clamp(1.3rem, 5.5vw, 1.7rem); /* Figma: 24px相当 */
+  border-radius: 4px;
+  background-image: url("images/guidance-number-bg.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain; /* 画像が切れないよう cover→contain に変更 */
+}
+
+/* Figma仕様: Tsukushi A Round Gothic Bold 20px 白
+   修正: 「ドレスコード（服装）」が改行されてしまう問題への対応として、
+   white-space:nowrapで改行を禁止し、フォントサイズの上限も少し抑えている */
+.guidance-heading {
+  font-family: var(--font-jp-bold);
+  font-size: clamp(1rem, 4vw, 1.15rem); /* Figma: 20px相当。改行防止のため上限を少し下げた */
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Figma仕様: 「お召し物：」「お足元：」はBold、それ以外はRegular 16px 白。
+   修正: 以前は<p>全体をRegularでまとめていたが、HTML側で
+   ラベル部分だけ<span class="guidance-text-label">に分けたので、
+   ここでラベルだけBoldにしている */
+.guidance-text {
+  font-family: var(--font-jp); /* ベースはRegular */
+  font-size: clamp(0.9rem, 3.8vw, 1.05rem); /* Figma: 16px相当 */
+  margin-bottom: 12px;
+  opacity: 0.95;
+}
+.guidance-text:last-child {
+  margin-bottom: 0;
+}
+.guidance-text-label {
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+}
+
+
+/* ================================================================
+   ⑩ RSVPセクション
+   修正点：
+   ・セクション全体の背景は#EAE7E4(クリーム)にし、
+     その内側に余白を持たせた白い「紙」のようなカード(.rsvp-card)を重ねる
+   ・見出しとリード文の行間を詰めた
+   ・送信ボタンを文字サイズに合わせた可変幅ボタンに変更
+================================================================ */
+.rsvp {
+  padding: var(--section-padding);
+  background: var(--color-cream-dark); /* #EAE7E4。外側はクリーム背景のまま */
+}
+
+/* 白いカード部分。max-widthと左右autoマージンで中央寄せにし、
+   外側のクリーム色が周囲に見える余白をつくることで
+   「紙の出欠表が置いてある」ような見た目にしている */
+.rsvp-card {
+  max-width: 560px;
+  margin: 0 auto;
+  background: var(--color-white);
+  padding: 48px 28px;
+  /* 修正: 角丸・シャドウともに不要とのことで削除 */
+}
+
+.rsvp .script-heading {
+  margin-bottom: 8px; /* RSVPとご出欠についての行間を詰める */
+}
+
+/* Figma仕様: Tsukushi A Round Gothic Bold 24px #545C38(オリーブ) */
+.rsvp-lead {
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  text-align: center;
+  font-size: clamp(1.2rem, 5vw, 1.5rem); /* Figma: 24px相当 */
+  color: var(--color-olive); /* Figma: #545C38 */
+  margin-bottom: 16px;
+}
+
+/* Figma仕様: 「誠に勝手ながら」「までに…」はRegular16px、
+   日付部分は<strong>タグで元からBoldになっている。色はすべて#282930 */
+.rsvp-deadline {
+  text-align: center;
+  font-size: clamp(0.9rem, 3.8vw, 1.05rem); /* Figma: 16px相当 */
+  color: var(--color-text); /* Figma: #282930 */
+  margin-bottom: 40px;
+}
+
+.attend-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.attend-btn {
+  position: relative;
+  flex: 1 1 100px;
+  max-width: 130px;
+  padding: 18px 8px 14px;
+  background: #fffdf9;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.attend-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Figma仕様: 「ご出席/ご欠席/保留」は Tsukushi A Round Gothic Bold 24px #000000 */
+.attend-btn-jp {
+  font-family: var(--font-jp-bold);
+  font-size: clamp(1.05rem, 4.5vw, 1.3rem); /* Figma: 24px相当 */
+  font-weight: 700;
+  color: var(--color-ink-black); /* Figma: #000000 */
+}
+
+/* Figma仕様: 「Attend/Decline/Hold」は Regular 20px #000000 */
+.attend-btn-en {
+  font-size: clamp(0.85rem, 3.6vw, 1.05rem); /* Figma: 20px相当 */
+  color: var(--color-ink-black); /* Figma: #000000(旧#8a8074から変更) */
+  letter-spacing: 1px;
+}
+
+/* 丸印は画像ファイル(images/rsvp-mark.png)。
+   修正点：以前はボタンの左上基準でずれて配置されていたため、
+   left/top 50% + transform: translate(-50%, -50%) で
+   ボタンの「真ん中」を基準に配置し直し、サイズも大きくした。
+   選ばれていない間は透明にしておき、選ばれたらふわっと拡大しながら表示する */
+.attend-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  object-fit: contain;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.7);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.attend-btn.is-selected .attend-mark {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.attend-btn.is-selected {
+  border-color: var(--color-gold);
+}
+
+.field-error {
+  display: none;
+  text-align: center;
+  color: #b0413e;
+  font-size: 0.85rem;
+  margin: 8px 0 24px;
+}
+.field-error.is-visible {
+  display: block;
+}
+
+#rsvp-form {
+  max-width: 460px;
+  margin: 32px auto 0;
+}
+
+/* Figma仕様: 「お名前」等のラベルは Tsukushi A Round Gothic Bold 20px #000000 */
+#rsvp-form label {
+  display: block;
+  font-family: var(--font-jp-bold);
+  margin-top: 24px;
+  margin-bottom: 8px;
+  font-size: clamp(1rem, 4.2vw, 1.2rem); /* Figma: 20px相当 */
+  font-weight: 700;
+  color: var(--color-ink-black); /* Figma: #000000 */
+}
+
+/* Figma仕様: 「必須」は Bold 12px 白 */
+.required-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  background: var(--color-olive);
+  color: var(--color-text-light); /* Figma: #FFFFFF */
+  font-size: 0.7rem; /* Figma: 12px相当 */
+  font-weight: 700; /* Figma: Bold（旧400から変更） */
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+#rsvp-form input[type="text"],
+#rsvp-form input[type="email"],
+#rsvp-form input[type="tel"],
+#rsvp-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--font-jp);
+  font-size: 0.95rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  background: #fffdf9;
+}
+
+/* Figma仕様: プレースホルダー(「例）山田　太郎」等)は Bold 16px #A8A8A8 */
+#rsvp-form input::placeholder,
+#rsvp-form textarea::placeholder {
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  color: var(--color-placeholder); /* Figma: #A8A8A8 */
+}
+
+#rsvp-form textarea {
+  resize: vertical;
+}
+
+/* Figma仕様: 注意書き(「パーティー後にお聞き…」)は Bold 16px #000000 */
+.field-note {
+  font-family: var(--font-jp-bold);
+  font-weight: 700;
+  font-size: clamp(0.85rem, 3.6vw, 1rem); /* Figma: 16px相当 */
+  color: var(--color-ink-black); /* Figma: #000000(旧#7a7062から変更) */
+  margin-bottom: 8px;
+}
+
+#allergy-field {
+  display: none;
+}
+#allergy-field.is-visible {
+  display: block;
+}
+
+/* 送信ボタンを中央寄せにするためのラッパー */
+.submit-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* 修正点：横幅いっぱい(100%)ではなく、文字サイズに合わせた
+   ひとまわり大きい可変幅ボタンに変更。
+   Figma仕様: 「送信する」は Tsukushi A Round Gothic Bold 20px 白 */
+.submit-btn {
+  display: inline-block;
+  width: auto;
+  margin-top: 40px;
+  padding: 16px 56px;
+  background: var(--color-olive);
+  color: var(--color-text-light); /* Figma: #FFFFFF */
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-jp-bold); /* Figma: Bold指定のためbold用変数を使用 */
+  font-size: clamp(1.05rem, 4.5vw, 1.25rem); /* Figma: 20px相当 */
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.submit-btn:hover {
+  background: var(--color-olive-dark);
+  transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#result-message {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: 700;
+}
+#result-message.is-error {
+  color: #b0413e;
+}
+#result-message.is-success {
+  color: var(--color-olive);
+}
+
+
+/* ================================================================
+   フッター
+   Figma仕様: ©2026 umi design partner は Noto Sans JP Light 12px 白(#FFFFFF)
+   ※白文字のため、そのままだと元のクリーム背景では読みにくくなってしまう。
+     デザイン意図(白文字)を活かすため、背景をオリーブの濃色に変更して
+     コントラストを確保している(文字色そのものはExcel仕様どおり)。
+================================================================ */
+.footer {
+  padding: 40px 20px 60px;
+  text-align: center;
+  font-family: var(--font-jp-light); /* Figma: Noto Sans JP */
+  font-weight: 300; /* Light */
+  font-size: clamp(0.75rem, 3vw, 0.85rem); /* Figma: 12px相当 */
+  color: var(--color-text-light); /* Figma: #FFFFFF */
+  background: var(--color-olive-dark); /* 白文字を読みやすくするため濃色に変更 */
+}
+
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--color-olive);
+  outline-offset: 2px;
+}
+
+
+/* ================================================================
+   レスポンシブ対応
+================================================================ */
+@media (min-width: 640px) {
+  .profile {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+  }
+}
