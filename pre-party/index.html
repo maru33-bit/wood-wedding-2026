@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Masaru and Manami 5th Anniversary Party</title>
+
+  <!-- ==========================================================
+       Google Fonts の読み込み
+       ※フォントの種類・太さは、Figmaのスクリーンショットが届き次第
+         正確な指定に差し替えます（現状は暫定のフォントです）
+  =========================================================== -->
+  <!-- ==========================================================
+       Google Fonts の読み込み（Figmaデザイン仕様のExcelに基づき更新）
+       ・Playwrite US Trad … Wedding/Invitation/Message/Gallery/RSVP/
+                              Party Information の見出し（筆記体風）
+       ・Josefin Slab       … Masaru / Manami
+       ・Caveat              … "and"（Figma Handの代替。手書き風）
+       ・Bellota             … 5th Anniversary Party／日付／カウントダウン数字
+       ・Oleo Script         … ご案内の 01/02/03
+       ・M PLUS Rounded 1c   … 日本語本文・太字見出し（Tsukushi A Round Gothicの代替）
+       ・Noto Sans JP(Light) … カウントダウンラベル／フッターの著作権表記
+  =========================================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Trad&family=Josefin+Slab:wght@400;500&family=Caveat:wght@400;600&family=Bellota:ital,wght@0,400;0,700&family=Oleo+Script&family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- CSS読み込み -->
+  <link rel="stylesheet" href="Invitation.css">
+</head>
+<body>
+
+  <!-- ==========================================================
+       ① 封筒アニメーション（オープニング演出）
+       流れ：
+       ① シーリングスタンプで封がされた封筒が表示される
+       ② タップすると、封筒のフタが開く
+          （シーリングスタンプはフタにくっついたまま、割れずに一緒についてくる）
+       ③ 中の手紙（画像）が出てくる。少し長めに表示してから
+          画面全体がフェードアウトする（タイミングはInvitation.js側で管理）
+       修正点：
+       ・開く前は手紙(envelope-letter)を完全に透明にしておき、
+         フタ(envelope-flap)と重なって見える問題を解消
+       ・開いた後は z-index を切り替えて、手紙がフタより
+         「手前」に来るようにする（Invitation.css側で制御）
+       ・手紙の中身はテキストではなく画像(images/envelope-letter.png)に変更
+       ・シーリングスタンプ(images/envelope-seal.png)を追加
+         → 割ったり剥がれたりはせず、スタンプ全体が「フタ」に
+            そのままくっついた状態でフタと一緒に開くようにするため、
+            HTML上でもフタ(envelope-flap)の中に入れている
+  =========================================================== -->
+  <div id="envelope-screen" class="envelope-screen">
+    <div class="envelope" id="envelope">
+      <div class="envelope-body"></div>
+      <div class="envelope-letter">
+        <!-- 手紙の中身。images/envelope-letter.png を差し替えるだけで内容を変更できる -->
+        <img src="images/envelope-letter.png" alt="招待状の手紙" class="envelope-letter-img">
+      </div>
+      <div class="envelope-flap">
+        <!-- シーリングスタンプ。フタの先端(合わせ目)に重なるように配置している。
+             フタの子要素にすることで、フタが開くと一緒に回転してついてくる。
+             割ったり動かしたりはせず、そのままフタにくっついている。
+             envelope-seal-wrap: 位置決め専用（動かない）
+             envelope-seal     : スタンプ本体の画像 -->
+        <div class="envelope-seal-wrap" aria-hidden="true">
+          <img src="images/envelope-seal.png" alt="" class="envelope-seal">
+        </div>
+      </div>
+    </div>
+    <p class="envelope-hint" id="envelope-hint">タップして封筒を開ける</p>
+  </div>
+
+  <main id="main-content">
+
+    <!-- ==========================================================
+         ② ヒーローセクション
+         修正点：
+         ・写真3枚は上下左に余白なく敷き詰め、センターラインまで拡大
+         ・「wedding」は右上の角に余白なくぴったり配置(画像1枚目の上端と揃える)
+         ・「invitation」は左下の角に余白なくぴったり配置(画像3枚目の下端と揃える)
+    =========================================================== -->
+    <section class="hero" id="hero">
+      <!-- 右上の角にぴったり配置する「wedding」の縦文字（装飾なのでaria-hidden） -->
+      <div class="hero-bg-text" aria-hidden="true">Wedding</div>
+
+      <div class="hero-inner">
+        <!-- 左カラム：写真3枚を上下左に余白なく敷き詰める -->
+        <div class="hero-gallery">
+          <img src="images/hero1.jpg" alt="お二人の写真1">
+          <img src="images/hero2.jpg" alt="お二人の写真2">
+          <img src="images/hero3.jpg" alt="お二人の写真3">
+          <!-- 左下の角にぴったり配置する透かし文字。画像より前面(z-indexが高い)に配置している -->
+          <div class="hero-watermark" aria-hidden="true">Invitation</div>
+        </div>
+
+        <div class="hero-text">
+          <p class="hero-name">Masaru</p>
+          <p class="hero-and">and</p>
+          <p class="hero-name">Manami</p>
+          <p class="hero-sub">5th Anniversary Party</p>
+          <p class="hero-date">2026.10.10</p>
+        </div>
+      </div>
+
+      <div class="scroll-down" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- ==========================================================
+         ③-a カウントダウン上の接続セクション
+         背景色はヒーローと同じ(白)。横幅いっぱいの画像を1枚差し込める。
+         images/countdown-connector-top.png を差し替えてください
+    =========================================================== -->
+    <section class="connector connector-top">
+      <img class="connector-img" src="images/countdown-connector-top.png" alt="">
+    </section>
+
+    <!-- ==========================================================
+         ③ カウントダウンセクション
+         修正点：
+         ・背景色を #D0ABA1 の単色にし、その上に一回り小さい写真を重ねた
+         ・テキストは写真の中央ではなく、上寄せに配置
+    =========================================================== -->
+    <section class="countdown">
+      <div class="countdown-box">
+        <!-- 一回り小さく表示される写真。images/countdown-photo.jpg を差し替え -->
+        <img class="countdown-photo" src="images/countdown-photo.jpg" alt="">
+        <div class="countdown-text">
+          <p class="countdown-label">パーティーまであと</p>
+          <p class="countdown-days"><span id="cd-days">--</span> days</p>
+          <p class="countdown-detail">
+            <span id="cd-hours">--</span> hours
+            <span id="cd-minutes">--</span> minutes
+            <span id="cd-seconds">--</span> seconds
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ③-b カウントダウン下の接続セクション
+         背景色はメッセージセクションと同じ。横幅いっぱいの画像を1枚と、
+         その上に重なるように配置する「アクセント画像」(サイズ調整可)を1枚差し込める。
+         images/countdown-connector-bottom.png / countdown-connector-accent.png を差し替えてください
+    =========================================================== -->
+    <section class="connector connector-bottom">
+      <img class="connector-img" src="images/countdown-connector-bottom.png" alt="">
+      <!-- アクセント画像：サイズや位置は Invitation.css の .connector-accent-img で調整できる -->
+      <img class="connector-accent-img" src="images/countdown-connector-accent.png" alt="">
+    </section>
+
+    <!-- ==========================================================
+         ④ メッセージセクション
+         修正点：単色背景(#EAE7E4)の上に、サイズ調整できる
+         「アクセント画像」を2枚、影なしで背景に溶け込むように配置
+         images/message-accent1.png / message-accent2.jpg を差し替えてください
+    =========================================================== -->
+    <section class="message">
+      <div class="message-content">
+        <h2 class="script-heading">Message</h2>
+        <!-- アクセント画像2枚は、見出しではなく本文(message-body)を基準に
+             右上・左下へ配置している。位置・サイズ・角度は
+             Invitation.css の .message-accent-1 / .message-accent-2 で調整できる -->
+        <div class="message-body">
+          <!-- アクセント1：本文の右上、時計回りに少し傾ける -->
+          <img class="message-accent-img message-accent-1" src="images/message-accent1.png" alt="">
+          <!-- アクセント2：本文の左下 -->
+          <img class="message-accent-img message-accent-2" src="images/message-accent2.png" alt="">
+          <p>お世話になっている皆さまへ</p>
+          <p>このたび私たちは<br>結婚５周年を迎えることとなりました</p>
+          <p>
+            感謝の気持ちを込めて<br>
+            ささやかなパーティーを開催いたします<br>
+            大切な皆さまと穏やかな時間を<br>
+            過ごせましたら幸いです
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ⑤ プロフィールセクション（コイン反転写真）
+         修正点：
+         ・Safari(iPhone)でも正しく表と裏が切り替わるよう
+           Invitation.css側でベンダープレフィックスを追加
+         ・「メッセージ」は、後日手書き文字の透過PNGをはめ込む予定
+           （末尾に署名として名前も入る想定のため、名前用の画像枠は削除した）
+         ・「新郎」「新婦」の文字は削除し、コインのすぐ下にメッセージ画像が来るようにした
+         ・コインの右上に、円の縁に沿って曲線状の「Tap here」の文字を追加した
+           （SVGのtextPathで円弧に沿わせている。装飾なのでaria-hiddenにしている）
+    =========================================================== -->
+    <section class="profile">
+      <div class="profile-card">
+        <div class="coin-wrap">
+          <button type="button" class="coin" data-coin aria-label="タップして新郎の写真を切り替える">
+            <span class="coin-inner">
+              <span class="coin-face coin-front"><img src="images/groom-front.jpg" alt="新郎の写真（表）"></span>
+              <span class="coin-face coin-back"><img src="images/groom-back.jpg" alt="新郎の写真（裏）"></span>
+            </span>
+          </button>
+          <!-- 円の右上の縁に沿って「Tap here」を表示するSVG。
+               id="tapArcGroom" は同じページ内で重複しないよう新郎用に固有の名前にしている -->
+          <svg class="coin-tap-label" viewBox="0 0 260 260" aria-hidden="true">
+            <path id="tapArcGroom" d="M 130,20 A 110,110 0 0 1 240,130" fill="none" />
+            <text>
+              <textPath href="#tapArcGroom" startOffset="50%" text-anchor="middle">Tap here</textPath>
+            </text>
+          </svg>
+        </div>
+        <!-- 手書きメッセージ(透過PNG・末尾に署名として名前も含む予定)をはめ込む枠。
+             images/groom-message.png を差し替えてください -->
+        <img class="profile-message-img" src="images/groom-message.png" alt="新郎からのメッセージ">
+      </div>
+
+      <div class="profile-card">
+        <div class="coin-wrap">
+          <button type="button" class="coin" data-coin aria-label="タップして新婦の写真を切り替える">
+            <span class="coin-inner">
+              <span class="coin-face coin-front"><img src="images/bride-front.jpg" alt="新婦の写真（表）"></span>
+              <span class="coin-face coin-back"><img src="images/bride-back.jpg" alt="新婦の写真（裏）"></span>
+            </span>
+          </button>
+          <svg class="coin-tap-label" viewBox="0 0 260 260" aria-hidden="true">
+            <path id="tapArcBride" d="M 130,20 A 110,110 0 0 1 240,130" fill="none" />
+            <text>
+              <textPath href="#tapArcBride" startOffset="50%" text-anchor="middle">Tap here</textPath>
+            </text>
+          </svg>
+        </div>
+        <img class="profile-message-img" src="images/bride-message.png" alt="新婦からのメッセージ">
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ⑥ ギャラリーセクション
+         修正点：
+         ・常時オリーブ背景だったのをやめ、周りと同じ地色に変更
+           （オリーブ背景はこのあとの「パーティー情報＋ご案内」へ移動）
+         ・触ったら左右にドラッグでき、触っていない間は自動でスライドする
+           仕組みに変更（Invitation.js側でscrollLeftを制御）
+    =========================================================== -->
+    <section class="gallery">
+      <h2 class="script-heading">Gallery</h2>
+      <div class="gallery-marquee" id="gallery-marquee">
+        <div class="gallery-track" id="gallery-track">
+          <img src="images/gallery1.jpg" alt="ギャラリー写真1">
+          <img src="images/gallery2.jpg" alt="ギャラリー写真2">
+          <img src="images/gallery3.jpg" alt="ギャラリー写真3">
+          <img src="images/gallery4.jpg" alt="ギャラリー写真4">
+          <img src="images/gallery5.jpg" alt="ギャラリー写真5">
+          <!-- 継ぎ目なくループさせるための複製 -->
+          <img src="images/gallery1.jpg" alt="" aria-hidden="true">
+          <img src="images/gallery2.jpg" alt="" aria-hidden="true">
+          <img src="images/gallery3.jpg" alt="" aria-hidden="true">
+          <img src="images/gallery4.jpg" alt="" aria-hidden="true">
+          <img src="images/gallery5.jpg" alt="" aria-hidden="true">
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ⑦+⑧ パーティー情報＋アクセス＋ご案内
+         修正点：
+         ・オリーブ背景（画像差し込み可）を、この3セクションぶん
+           まとめて1枚の背景としてかぶせる（継ぎ目が出ないように
+           親要素<div class="panel-olive">でラップしている）
+    =========================================================== -->
+    <div class="panel-olive">
+      <img class="panel-olive-img" src="images/info-bg.png" alt="">
+
+      <div class="panel-olive-content">
+
+        <section class="party-info">
+          <h2 class="script-heading light">Party<br>Information</h2>
+
+          <div class="info-block">
+            <p class="info-title">開催日</p>
+            <div class="info-divider"></div>
+            <p class="info-date"><span class="info-date-num">2026</span>年 <span class="info-date-num">10</span>月 <span class="info-date-num">10</span>日 土曜日</p>
+            <p class="info-time">開始時刻 <span>13:00</span></p>
+            <p class="info-time-sub">受付 12:45 ／ 終了予定 14:30</p>
+          </div>
+
+          <div class="info-block">
+            <p class="info-title">会場情報</p>
+            <div class="info-divider"></div>
+            <p class="info-venue">BIRTH LAB</p>
+            <p class="info-address">
+              〒106-0045<br>
+              東京都港区麻布十番2-20-7<br>
+              麻布十番髙木ビル 1F
+            </p>
+          </div>
+
+          <div class="info-block">
+            <p class="info-access-text">
+              都営大江戸線／東京メトロ南北線<br>
+              「麻布十番駅」1番／4番出口から<br>徒歩1分
+            </p>
+            <div class="map-wrapper">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.9000187605357!2d139.73410297649215!3d35.654834872595735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b5fe58bafed%3A0xb0dfc1eb5c8f2816!2sBIRTH%20LAB%20%2F%20WORK!5e0!3m2!1sja!2sjp!4v1781591691264!5m2!1sja!2sjp"
+                width="100%" height="320" style="border:0;" allowfullscreen=""
+                loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                title="BIRTH LAB 地図"></iframe>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================
+             ⑨ ご案内セクション
+             修正点：
+             ・番号バッジは画像(images/guidance-number-bg.png)そのものを
+               背景として使用し、色のオーバーレイは廃止した
+             ・重なり順：背景色→パーティ情報〜ご案内の背景画像→
+               番号バッジ画像→数字、の順になっている
+        =========================================================== -->
+        <section class="guidance">
+          <h2 class="section-title light">ご案内</h2>
+          <div class="info-divider info-divider-guidance"></div>
+
+          <div class="guidance-item">
+            <div class="guidance-heading-row">
+              <div class="guidance-number">01</div>
+              <p class="guidance-heading">ドレスコード（服装）</p>
+            </div>
+            <p class="guidance-text">
+              <span class="guidance-text-label">お召し物：</span>お気に入りのお洋服でお越しください
+            </p>
+            <p class="guidance-text">
+              <span class="guidance-text-label">お足元：</span>立食パーティー形式（ソファやベンチ等のお席あり）となります<br>
+              足元が疲れぬよう ローヒールや履き慣れたお靴でお越しいただいても全く問題ございません
+            </p>
+          </div>
+
+          <div class="guidance-item">
+            <div class="guidance-heading-row">
+              <div class="guidance-number">02</div>
+              <p class="guidance-heading">会費のご案内</p>
+            </div>
+            <p class="guidance-text">
+              お一人様 1,000円<br>
+              受付混雑緩和のため 会費はあらかじめ「お名前を記載した封筒」にお納めのうえ 受付へお渡しいただけますと幸いです
+            </p>
+          </div>
+
+          <div class="guidance-item">
+            <div class="guidance-heading-row">
+              <div class="guidance-number">03</div>
+              <p class="guidance-heading">お荷物について</p>
+            </div>
+            <p class="guidance-text">
+              専用クロークのご用意がございませんため できるだけ身軽なお荷物でお越しいただけますと幸いです
+            </p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ==========================================================
+         ⑩ RSVP（出欠確認）セクション
+         修正点：
+         ・背景色(#EAE7E4)の上に、余白を持たせた白いカード
+           （紙の出欠表のイメージ）を重ねる2階層構造に変更
+         ・出欠の丸印を画像ファイル(images/rsvp-mark.png)に変更
+         ・「RSVP」見出しと「ご出欠について」の行間を詰めた
+         ・送信ボタンを文字より一回り大きい可変幅ボタンに変更
+    =========================================================== -->
+    <section class="rsvp">
+      <div class="rsvp-card">
+        <h2 class="script-heading">RSVP</h2>
+        <p class="rsvp-lead">ご出欠について</p>
+        <p class="rsvp-deadline">
+          誠に勝手ながら<br>
+          <strong>2026年9月30日（水）</strong>までに<br>
+          ご回答いただければ幸いに存じます
+        </p>
+
+        <form id="rsvp-form" novalidate>
+
+          <div class="attend-buttons" role="group" aria-label="ご出欠の選択">
+            <button type="button" class="attend-btn" data-value="出席">
+              <!-- 丸印は画像ファイル。images/rsvp-mark.png を差し替えれば見た目を変更できる -->
+              <img class="attend-mark" src="images/rsvp-mark.png" alt="" aria-hidden="true">
+              <span class="attend-btn-jp">ご出席</span>
+              <span class="attend-btn-en">Attend</span>
+            </button>
+
+            <button type="button" class="attend-btn" data-value="欠席">
+              <img class="attend-mark" src="images/rsvp-mark.png" alt="" aria-hidden="true">
+              <span class="attend-btn-jp">ご欠席</span>
+              <span class="attend-btn-en">Decline</span>
+            </button>
+
+            <button type="button" class="attend-btn" data-value="保留">
+              <img class="attend-mark" src="images/rsvp-mark.png" alt="" aria-hidden="true">
+              <span class="attend-btn-jp">保留</span>
+              <span class="attend-btn-en">Hold</span>
+            </button>
+          </div>
+          <input type="hidden" id="attendance" name="attendance" required>
+          <p class="field-error" id="attendance-error">出欠を選択してください</p>
+
+          <label for="name">お名前<span class="required-badge">必須</span></label>
+          <input type="text" id="name" name="name" placeholder="例）山田 太郎" required>
+
+          <label for="address">ご住所<span class="required-badge">必須</span></label>
+          <input type="text" id="address" name="address" placeholder="例）東京都千代田区三丁目5番7号" required>
+
+          <label for="email">メールアドレス<span class="required-badge">必須</span></label>
+          <input type="email" id="email" name="email" placeholder="例）sample@xxx.com" required>
+
+          <label for="phone">電話番号<span class="required-badge">必須</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="例）0120-123-456" required>
+
+          <div id="allergy-field">
+            <label for="allergy">アレルギーの有無<span class="required-badge">必須</span></label>
+            <input type="text" id="allergy" name="allergy" placeholder="例）あり（甲殻類、小麦）">
+          </div>
+
+          <label for="question">私たちに聞いてみたい事やメッセージなど</label>
+          <p class="field-note">
+            パーティー後にお聞きいただけるポッドキャスト内でお答えさせていただきます！<br>
+            お好きなラジオネームと一緒にぜひお寄せください
+          </p>
+          <textarea id="question" name="question" rows="4"
+            placeholder="例）2人の好きなお味噌汁の具はなんですか？（30代女性／のびのびヨギ太郎）"></textarea>
+
+          <div class="submit-wrap">
+            <button type="submit" class="submit-btn" id="submit-btn">送信する</button>
+          </div>
+        </form>
+
+        <p id="result-message" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>© 2026 Masaru &amp; Manami</p>
+    </footer>
+
+  </main>
+
+  <script src="Invitation.js"></script>
+</body>
+</html>
